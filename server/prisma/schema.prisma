@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  photo     String?
+  name      String
+  password  String
+  role      Role      @default(USER)
+  listings  Listing[]
+  lastLogin DateTime  @default(now())
+}
+
+model Listing {
+  id                String   @id @default(uuid())
+  title             String
+  image             String
+  description       String
+  address           Address?
+  price             Int
+  estimatedPrice    Int?
+  numOfBeds         Int
+  numOfBaths        Int
+  numOfMeterSquared Int
+  postedAt          DateTime @default(now())
+  postedBy          User     @relation(fields: [posterId], references: [id]) // the user that posted the listing
+  posterId          String
+}
+
+model Address {
+  id         String  @id @default(uuid())
+  country    String
+  city       String
+  street     String
+  postalCode String
+  listing    Listing @relation(fields: [listingId], references: [id])
+  listingId  String  @unique
+}

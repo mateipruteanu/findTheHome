@@ -8,6 +8,7 @@ import { UserNotFoundException } from './exceptions/user-not-found.exception';
 import { Messages } from 'src/messages/messages.enum';
 import { ListingNotFoundException } from 'src/listing/exceptions/listing-not-found.exception';
 import { CannotDeleteAccountException } from './exceptions/cannot-delete-account.exception';
+import { CannotUpdateAccountException } from './exceptions/cannot-update-account.exception';
 
 @Injectable()
 export class UserService {
@@ -96,7 +97,17 @@ export class UserService {
       });
   }
 
-  update(id: Prisma.UserWhereUniqueInput, updateUserDto: UpdateUserDto) {
+  async update(
+    id: Prisma.UserWhereUniqueInput,
+    userId: string,
+    updateUserDto: UpdateUserDto,
+  ) {
+    const isUserAdmin = await this.isUserAdmin(userId);
+
+    if (id.id !== userId && !isUserAdmin) {
+      throw new CannotUpdateAccountException();
+    }
+
     return this.prisma.user
       .update({
         where: id,

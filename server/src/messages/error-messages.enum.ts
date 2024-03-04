@@ -1,6 +1,8 @@
 export enum ErrorMessages {
   UserNotFound = 'User not found',
-  CannotDeleteAccountException = 'User can not delete this account because it is not theirs',
+  CannotDeleteAccount = 'User can not delete this account because it is not theirs',
+  CannotUpdateAccount = 'User can not update this account because it is not theirs',
+
   EmailAlreadyExists = 'Email already exists',
   InternalServerError = 'Internal Server Error',
   WrongPassword = 'Wrong password',

@@ -65,7 +65,12 @@ export class UserController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard)
   @ApiResponse({ status: HttpStatus.OK, description: Messages.UserUpdated })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: ErrorMessages.CannotUpdateAccount,
+  })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
     description: ErrorMessages.BadRequest,
@@ -78,8 +83,13 @@ export class UserController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: ErrorMessages.InternalServerError,
   })
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update({ id }, updateUserDto);
+  update(
+    @Request() req,
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    const userId = req.user.sub;
+    return this.userService.update({ id }, userId, updateUserDto);
   }
 
   @Delete(':id')
@@ -88,6 +98,10 @@ export class UserController {
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
     description: ErrorMessages.UserNotFound,
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: ErrorMessages.CannotDeleteAccount,
   })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,

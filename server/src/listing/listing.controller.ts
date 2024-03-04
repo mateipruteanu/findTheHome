@@ -73,6 +73,10 @@ export class ListingController {
     description: ErrorMessages.BadRequest,
   })
   @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: ErrorMessages.UserCantEditListing,
+  })
+  @ApiResponse({
     status: HttpStatus.NOT_FOUND,
     description: ErrorMessages.ListingNotFound,
   })
@@ -92,6 +96,10 @@ export class ListingController {
   @Delete(':id')
   @UseGuards(AuthGuard)
   @ApiResponse({ status: HttpStatus.OK, description: Messages.ListingDeleted })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: ErrorMessages.UserCantDeleteListing,
+  })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
     description: ErrorMessages.ListingNotFound,

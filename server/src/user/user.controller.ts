@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   HttpStatus,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -14,6 +16,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Messages } from 'src/messages/messages.enum';
 import { ErrorMessages } from 'src/messages/error-messages.enum';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('user')
 @ApiTags('User')
@@ -80,6 +83,7 @@ export class UserController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard)
   @ApiResponse({ status: HttpStatus.OK, description: Messages.UserDeleted })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
@@ -89,7 +93,8 @@ export class UserController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: ErrorMessages.InternalServerError,
   })
-  delete(@Param('id') id: string) {
-    return this.userService.delete({ id });
+  delete(@Request() req, @Param('id') id: string) {
+    const userId = req.user.sub;
+    return this.userService.delete({ id }, userId);
   }
 }

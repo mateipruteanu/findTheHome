@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   HttpStatus,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { ListingService } from './listing.service';
 import { CreateListingDto } from './dto/create-listing.dto';
@@ -14,12 +16,14 @@ import { UpdateListingDto } from './dto/update-listing.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ErrorMessages } from 'src/messages/error-messages.enum';
 import { Messages } from 'src/messages/messages.enum';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('listing')
 @ApiTags('Listing')
 export class ListingController {
   constructor(private readonly listingService: ListingService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
   @ApiResponse({
     status: HttpStatus.CREATED,
@@ -33,9 +37,8 @@ export class ListingController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: ErrorMessages.InternalServerError,
   })
-  create(@Body() createListingDto: CreateListingDto) {
-    const { posterId, ...userListing } = createListingDto;
-    return this.listingService.create(posterId, userListing);
+  create(@Request() req, @Body() createListingDto: CreateListingDto) {
+    return this.listingService.create(req.user.sub, createListingDto);
   }
 
   @Get()
@@ -63,6 +66,7 @@ export class ListingController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard)
   @ApiResponse({ status: HttpStatus.OK, description: Messages.ListingUpdated })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
@@ -76,11 +80,17 @@ export class ListingController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: ErrorMessages.InternalServerError,
   })
-  update(@Param('id') id: string, @Body() updateListingDto: UpdateListingDto) {
-    return this.listingService.update({ id }, updateListingDto);
+  update(
+    @Request() req,
+    @Param('id') id: string,
+    @Body() updateListingDto: UpdateListingDto,
+  ) {
+    const userId = req.user.sub;
+    return this.listingService.update({ id }, userId, updateListingDto);
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard)
   @ApiResponse({ status: HttpStatus.OK, description: Messages.ListingDeleted })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
@@ -90,7 +100,8 @@ export class ListingController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: ErrorMessages.InternalServerError,
   })
-  remove(@Param('id') id: string) {
-    return this.listingService.remove({ id });
+  remove(@Request() req, @Param('id') id: string) {
+    const userId = req.user.sub;
+    return this.listingService.remove({ id }, userId);
   }
 }

@@ -3,8 +3,10 @@ import { UpdateListingDto } from './dto/update-listing.dto';
 import { PrismaService } from 'src/prisma.service';
 import { Prisma } from '@prisma/client';
 import { UserService } from 'src/user/user.service';
-import { CreateListingEntity } from './entity/create-listing.entity';
 import { ListingNotFoundException } from './exceptions/listing-not-found.exception';
+import { CreateListingDto } from './dto/create-listing.dto';
+import { UserCantEditListingException } from 'src/user/exceptions/user-cant-edit-listing.exception';
+import { UserCantDeleteListingException } from 'src/user/exceptions/user-cant-delete-listing.exception';
 
 @Injectable()
 export class ListingService {
@@ -13,7 +15,7 @@ export class ListingService {
     private userService: UserService,
   ) {}
 
-  async create(posterId: string, listing: CreateListingEntity) {
+  async create(posterId: string, listing: CreateListingDto) {
     const listingData: Prisma.ListingCreateInput = {
       ...listing,
       postedBy: {
@@ -87,10 +89,15 @@ export class ListingService {
       });
   }
 
-  update(
+  async update(
     id: Prisma.ListingWhereUniqueInput,
+    userId: string,
     updateListingDto: UpdateListingDto,
   ) {
+    if (!(await this.userService.canUserModifyListing(userId, id))) {
+      throw new UserCantEditListingException();
+    }
+
     const { address, ...listing } = updateListingDto;
     return this.prisma.listing
       .update({
@@ -113,18 +120,23 @@ export class ListingService {
       });
   }
 
-  remove(id: Prisma.ListingWhereUniqueInput) {
+  async remove(id: Prisma.ListingWhereUniqueInput, userId: string) {
+    const canUserModifyListing = await this.userService.canUserModifyListing(
+      userId,
+      id,
+    );
+    const isUserAdmin = await this.userService.isUserAdmin(userId);
+
+    if (!canUserModifyListing && !isUserAdmin) {
+      throw new UserCantDeleteListingException();
+    }
+
     return this.prisma.listing
       .delete({ where: id })
       .catch((error) => {
         if (error.code === 'P2025') {
           throw new ListingNotFoundException();
         }
-        // if (error.code === 'P2003') {
-        //   throw new InternalServerErrorException(
-        //     'Cannot delete a listing with existing bookings',
-        //   );
-        // }
         throw new InternalServerErrorException(error);
       })
       .then((data) => {

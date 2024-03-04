@@ -6,6 +6,8 @@ import { EmailAlreadyExistsException } from './exceptions/email-exists.exception
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserNotFoundException } from './exceptions/user-not-found.exception';
 import { Messages } from 'src/messages/messages.enum';
+import { ListingNotFoundException } from 'src/listing/exceptions/listing-not-found.exception';
+import { CannotDeleteAccountException } from './exceptions/cannot-delete-account.exception';
 
 @Injectable()
 export class UserService {
@@ -75,7 +77,7 @@ export class UserService {
 
   getByEmail(email: string) {
     return this.prisma.user
-      .findUnique({
+      .findUniqueOrThrow({
         where: {
           email: email,
         },
@@ -118,7 +120,13 @@ export class UserService {
       });
   }
 
-  delete(id: Prisma.UserWhereUniqueInput) {
+  async delete(id: Prisma.UserWhereUniqueInput, userId: string) {
+    const isUserAdmin = await this.isUserAdmin(userId);
+
+    if (id.id !== userId && !isUserAdmin) {
+      throw new CannotDeleteAccountException();
+    }
+
     return this.prisma.user
       .delete({
         where: id,
@@ -138,6 +146,47 @@ export class UserService {
           password: undefined,
           message: Messages.UserDeleted,
         };
+      });
+  }
+
+  canUserModifyListing(userId: string, id: Prisma.ListingWhereUniqueInput) {
+    return this.prisma.listing
+      .findUnique({
+        where: id,
+        select: {
+          postedBy: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      })
+      .catch((error) => {
+        if (error.code === 'P2025') {
+          throw new ListingNotFoundException();
+        }
+        throw new InternalServerErrorException();
+      })
+      .then((data) => {
+        return data.postedBy.id === userId;
+      });
+  }
+
+  isUserAdmin(userId: string) {
+    return this.prisma.user
+      .findUnique({
+        where: {
+          id: userId,
+        },
+        select: {
+          role: true,
+        },
+      })
+      .catch(() => {
+        throw new InternalServerErrorException();
+      })
+      .then((data) => {
+        return data.role === 'ADMIN';
       });
   }
 }

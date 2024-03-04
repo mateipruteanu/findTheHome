@@ -6,21 +6,33 @@ import { Messages } from 'src/messages/messages.enum';
 import { WrongPasswordException } from './exceptions/wrong-password.exception';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { PasswordsDoNotMatchException } from './exceptions/passwords-dont-match.exception';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private jwtService: JwtService,
+  ) {}
 
   async signIn(signInDto: SignInDto) {
     const user = await this.userService.getByEmail(signInDto.email);
 
-    if (bcrypt.compare(signInDto.password, user.password)) {
-      return {
-        message: Messages.LoggedIn,
-      };
-    } else {
+    if (!(await bcrypt.compare(signInDto.password, user.password))) {
       throw new WrongPasswordException();
     }
+
+    const payload = {
+      email: user.email,
+      sub: user.id,
+      name: user.name,
+      photo: user.photo,
+    };
+
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+      message: Messages.LoggedIn,
+    };
   }
 
   async signUp(signUpDto: any) {

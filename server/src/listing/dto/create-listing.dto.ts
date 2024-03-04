@@ -56,8 +56,4 @@ export class CreateListingDto {
   @Min(1)
   @ApiProperty()
   numOfMeterSquared: number;
-
-  @IsString()
-  @ApiProperty()
-  posterId: string;
 }

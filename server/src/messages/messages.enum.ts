@@ -12,4 +12,6 @@ export enum Messages {
   ListingUpdated = 'Listing updated successfully',
   ListingDeleted = 'Listing deleted successfully',
   ListingFound = 'Listing found',
+
+  LoggedIn = 'Logged in successfully',
 }

@@ -73,6 +73,27 @@ export class UserService {
       });
   }
 
+  getByEmail(email: string) {
+    return this.prisma.user
+      .findUnique({
+        where: {
+          email: email,
+        },
+      })
+      .catch((error) => {
+        if (error.code === 'P2025') {
+          throw new UserNotFoundException();
+        }
+        throw new InternalServerErrorException();
+      })
+      .then((data) => {
+        return {
+          ...data,
+          message: Messages.UserFound,
+        };
+      });
+  }
+
   update(id: Prisma.UserWhereUniqueInput, updateUserDto: UpdateUserDto) {
     return this.prisma.user
       .update({

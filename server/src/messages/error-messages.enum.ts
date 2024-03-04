@@ -2,7 +2,9 @@ export enum ErrorMessages {
   UserNotFound = 'User not found',
   EmailAlreadyExists = 'Email already exists',
   InternalServerError = 'Internal Server Error',
-  WrongUsernameOrPassword = 'Wrong username or password',
+  WrongPassword = 'Wrong password',
+  PasswordsDontMatch = 'Passwords do not match',
+  EmailNotFound = 'Email not found',
   BadRequest = 'Bad Request',
   Unauthorized = 'Unauthorized',
 

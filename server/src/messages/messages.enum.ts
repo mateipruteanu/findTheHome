@@ -4,7 +4,6 @@ export enum Messages {
   UserDeleted = 'User deleted successfully',
   UserFound = 'User found',
 
-  AddressCreated = 'Address created successfully',
   AddressUpdated = 'Address updated successfully',
   AddressDeleted = 'Address deleted successfully',
   AddressFound = 'Address found',

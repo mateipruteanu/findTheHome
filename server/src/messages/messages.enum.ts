@@ -8,4 +8,9 @@ export enum Messages {
   AddressUpdated = 'Address updated successfully',
   AddressDeleted = 'Address deleted successfully',
   AddressFound = 'Address found',
+
+  ListingCreated = 'Listing created successfully',
+  ListingUpdated = 'Listing updated successfully',
+  ListingDeleted = 'Listing deleted successfully',
+  ListingFound = 'Listing found',
 }

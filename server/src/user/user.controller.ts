@@ -63,7 +63,10 @@ export class UserController {
 
   @Patch(':id')
   @ApiResponse({ status: HttpStatus.OK, description: Messages.UserUpdated })
-  @ApiResponse({ status: HttpStatus.OK, description: ErrorMessages.BadRequest })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: ErrorMessages.BadRequest,
+  })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
     description: ErrorMessages.UserNotFound,

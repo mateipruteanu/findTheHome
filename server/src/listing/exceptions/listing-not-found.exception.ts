@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { ErrorMessages } from 'src/messages/error-messages.enum';
 
-export class UserNotFoundException extends HttpException {
+export class ListingNotFoundException extends HttpException {
   constructor() {
-    super(ErrorMessages.UserNotFound, HttpStatus.NOT_FOUND);
+    super(ErrorMessages.ListingNotFound, HttpStatus.NOT_FOUND);
   }
 }

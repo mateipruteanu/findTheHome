@@ -1,41 +1,37 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import {
-  IsEmail,
-  IsNotEmpty,
   IsOptional,
+  IsPostalCode,
   IsString,
-  IsUrl,
   MaxLength,
   MinLength,
 } from 'class-validator';
 
-export class UpdateUserDto {
+export class UpdateAddressDto {
   @IsString()
-  @MinLength(3)
-  @MaxLength(30)
-  @IsNotEmpty()
-  @IsOptional()
-  @ApiPropertyOptional()
-  name?: string;
-
-  @IsEmail()
-  @MaxLength(50)
-  @IsNotEmpty()
-  @IsOptional()
-  @ApiPropertyOptional()
-  email?: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(8)
+  @MinLength(2)
   @MaxLength(50)
   @IsOptional()
   @ApiPropertyOptional()
-  password?: string;
+  country: string;
 
   @IsString()
-  @IsUrl()
+  @MinLength(2)
+  @MaxLength(50)
   @IsOptional()
   @ApiPropertyOptional()
-  photo?: string;
+  city: string;
+
+  @IsString()
+  @MinLength(2)
+  @MaxLength(100)
+  @IsOptional()
+  @ApiPropertyOptional()
+  street: string;
+
+  @IsString()
+  @IsPostalCode('any')
+  @IsOptional()
+  @ApiPropertyOptional()
+  postalCode: string;
 }

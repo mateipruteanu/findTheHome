@@ -11,11 +11,10 @@ import { Messages } from 'src/messages/messages.enum';
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  create(user: CreateUserDto) {
-    console.log('service: ', user);
+  create(createUserDto: CreateUserDto) {
     return this.prisma.user
       .create({
-        data: user,
+        data: createUserDto,
       })
       .catch((error) => {
         if (error.code === 'P2002') {
@@ -74,11 +73,11 @@ export class UserService {
       });
   }
 
-  update(id: Prisma.UserWhereUniqueInput, data: UpdateUserDto) {
+  update(id: Prisma.UserWhereUniqueInput, updateUserDto: UpdateUserDto) {
     return this.prisma.user
       .update({
         where: id,
-        data,
+        data: updateUserDto,
       })
       .catch((error) => {
         if (error.code === 'P2002') {
@@ -102,12 +101,15 @@ export class UserService {
     return this.prisma.user
       .delete({
         where: id,
+        include: {
+          listings: true,
+        },
       })
       .catch((error) => {
         if (error.code === 'P2025') {
           throw new UserNotFoundException();
         }
-        throw new InternalServerErrorException();
+        throw new InternalServerErrorException(error);
       })
       .then((data) => {
         return {

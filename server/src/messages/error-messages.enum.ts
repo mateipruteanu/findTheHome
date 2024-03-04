@@ -5,4 +5,9 @@ export enum ErrorMessages {
   WrongUsernameOrPassword = 'Wrong username or password',
   BadRequest = 'Bad Request',
   Unauthorized = 'Unauthorized',
+
+  AddressNotFound = 'Address not found',
+  PostalCodeNotValid = 'Postal code not valid',
+
+  ListingNotFound = 'Listing not found',
 }

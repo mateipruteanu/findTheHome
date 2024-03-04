@@ -35,7 +35,7 @@ model Listing {
   numOfBaths        Int
   numOfMeterSquared Int
   postedAt          DateTime @default(now())
-  postedBy          User     @relation(fields: [posterId], references: [id]) // the user that posted the listing
+  postedBy          User     @relation(fields: [posterId], references: [id], onDelete: Cascade) // the user that posted the listing
   posterId          String
 }
 
@@ -45,6 +45,6 @@ model Address {
   city       String
   street     String
   postalCode String
-  listing    Listing @relation(fields: [listingId], references: [id])
+  listing    Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
   listingId  String  @unique
 }

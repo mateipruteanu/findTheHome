@@ -12,6 +12,16 @@ enum Role {
   ADMIN
 }
 
+enum HomeType {
+  APARTMENT
+  HOUSE
+}
+
+enum ListingType {
+  RENT
+  SALE
+}
+
 model User {
   id        String    @id @default(uuid())
   email     String    @unique
@@ -24,7 +34,7 @@ model User {
 }
 
 model Listing {
-  id                String   @id @default(uuid())
+  id                String      @id @default(uuid())
   title             String
   image             String
   description       String
@@ -34,8 +44,10 @@ model Listing {
   numOfBeds         Int
   numOfBaths        Int
   numOfMeterSquared Int
-  postedAt          DateTime @default(now())
-  postedBy          User     @relation(fields: [posterId], references: [id], onDelete: Cascade) // the user that posted the listing
+  homeType          HomeType   @default(HOUSE)
+  listingType       ListingType @default(SALE)
+  postedAt          DateTime    @default(now())
+  postedBy          User        @relation(fields: [posterId], references: [id], onDelete: Cascade) // the user that posted the listing
   posterId          String
 }
 

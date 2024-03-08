@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -12,6 +13,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { CreateAddressDto } from 'src/address/dto/create-address.dto';
+import { ListingType, HomeType } from '@prisma/client';
 
 export class CreateListingDto {
   @IsString()
@@ -56,4 +58,16 @@ export class CreateListingDto {
   @Min(1)
   @ApiProperty()
   numOfMeterSquared: number;
+
+  @IsEnum(HomeType, {
+    message: 'homeType must be a valid home type (APARTMENT, HOUSE)',
+  })
+  @ApiProperty({ enum: HomeType, description: 'APARTMENT or HOUSE' })
+  homeType: HomeType;
+
+  @IsEnum(ListingType, {
+    message: 'listingType must be a valid listing type (SALE, RENT)',
+  })
+  @ApiProperty({ enum: ListingType, description: 'SALE or RENT' })
+  listingType: ListingType;
 }

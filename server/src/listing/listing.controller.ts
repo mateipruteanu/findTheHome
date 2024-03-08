@@ -9,6 +9,7 @@ import {
   HttpStatus,
   UseGuards,
   Request,
+  Query,
 } from '@nestjs/common';
 import { ListingService } from './listing.service';
 import { CreateListingDto } from './dto/create-listing.dto';
@@ -47,8 +48,8 @@ export class ListingController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: ErrorMessages.InternalServerError,
   })
-  getAll(@Body() params: any) {
-    return this.listingService.getAll(params);
+  getAll(@Query() query: any) {
+    return this.listingService.getAll(query);
   }
 
   @Get(':id')

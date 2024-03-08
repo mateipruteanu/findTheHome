@@ -7,6 +7,7 @@ import { ListingNotFoundException } from './exceptions/listing-not-found.excepti
 import { CreateListingDto } from './dto/create-listing.dto';
 import { UserCantEditListingException } from 'src/user/exceptions/user-cant-edit-listing.exception';
 import { UserCantDeleteListingException } from 'src/user/exceptions/user-cant-delete-listing.exception';
+import Fuse from 'fuse.js';
 
 @Injectable()
 export class ListingService {
@@ -41,17 +42,41 @@ export class ListingService {
       });
   }
 
-  getAll(params: {
-    skip?: number;
-    take?: number;
-    cursor?: Prisma.ListingWhereUniqueInput;
-    where?: Prisma.ListingWhereInput;
-    orderBy?: Prisma.ListingOrderByWithRelationInput;
-  }) {
+  async getAll(queryParams: any) {
+    const { skip, take, orderBy, homeType, listingType, city, priceLowerThan } =
+      queryParams;
+
+    const where = {};
+    if (homeType) {
+      where['homeType'] = homeType.toUpperCase();
+    }
+    if (listingType) {
+      where['listingType'] = listingType.toUpperCase();
+    }
+    if (city) {
+      const bestMatch = await this.fuzzySearchCity(city);
+      if (bestMatch) {
+        where['address'] = {
+          city: bestMatch,
+        };
+      }
+    }
+    if (priceLowerThan) {
+      where['price'] = {
+        lte: parseInt(priceLowerThan),
+      };
+    }
+
     return this.prisma.listing
-      .findMany({ ...params, include: { address: true, postedBy: true } })
-      .catch(() => {
-        throw new InternalServerErrorException();
+      .findMany({
+        include: { address: true, postedBy: true },
+        where,
+        skip: skip ? parseInt(skip) : undefined,
+        take: take ? parseInt(take) : undefined,
+        orderBy: orderBy ? { [orderBy]: 'asc' } : undefined,
+      })
+      .catch((error) => {
+        throw new InternalServerErrorException(error);
       })
       .then((data) => {
         return data.map((listing) => {
@@ -142,5 +167,20 @@ export class ListingService {
       .then((data) => {
         return data;
       });
+  }
+
+  async fuzzySearchCity(city: string): Promise<string> {
+    const cities = await this.prisma.address.findMany({
+      select: { city: true },
+    });
+
+    const options = {
+      keys: ['city'],
+    };
+
+    const fuse = new Fuse(cities, options);
+    const result = fuse.search(city);
+
+    return result[0]?.item.city;
   }
 }

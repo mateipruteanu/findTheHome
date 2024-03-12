@@ -98,7 +98,7 @@ export default function HeroSearch() {
         </InputGroup>
         <Button
           leftIcon={<SearchIcon />}
-          colorScheme="yellow"
+          bg={LightModeColors.secondary}
           rounded="full"
           boxShadow="md"
           minWidth={searchButtonWidth}
@@ -114,7 +114,16 @@ export default function HeroSearch() {
       <Flex justify="left" wrap="wrap" pt={4}>
         <Flex position="relative" h="36px" alignItems="center">
           <Button
-            colorScheme={activeButton === "For Sale" ? "blue" : "gray"}
+            bgColor={
+              activeButton === "For Sale"
+                ? LightModeColors.primary
+                : LightModeColors.background
+            }
+            color={
+              activeButton === "For Sale"
+                ? LightModeColors.background
+                : LightModeColors.primary
+            }
             variant={activeButton === "For Sale" ? "solid" : "outline"}
             onClick={() => handleListingTypeToggle("For Sale")}
             roundedLeft={"full"}
@@ -123,7 +132,16 @@ export default function HeroSearch() {
             For Sale
           </Button>
           <Button
-            colorScheme={activeButton === "For Rent" ? "blue" : "gray"}
+            bgColor={
+              activeButton === "For Rent"
+                ? LightModeColors.primary
+                : LightModeColors.background
+            }
+            color={
+              activeButton === "For Rent"
+                ? LightModeColors.background
+                : LightModeColors.primary
+            }
             variant={activeButton === "For Rent" ? "solid" : "outline"}
             onClick={() => handleListingTypeToggle("For Rent")}
             roundedRight={"full"}

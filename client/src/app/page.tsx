@@ -1,7 +1,7 @@
 "use client";
 import HelpSection from "@/components/HelpSection";
 import HeroSection from "@/components/HeroSection";
-import { Button, Container } from "@chakra-ui/react";
+import { Container } from "@chakra-ui/react";
 import React from "react";
 
 export default function Home() {

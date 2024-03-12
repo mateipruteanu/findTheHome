@@ -1,5 +1,5 @@
 "use client";
-import { Center, Container, Heading, Stack } from "@chakra-ui/react";
+import { Center, Heading, Stack } from "@chakra-ui/react";
 import HelpCard from "./HelpCard";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 

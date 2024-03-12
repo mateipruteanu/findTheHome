@@ -1,18 +1,10 @@
 "use client";
 
 import {
-  Container,
   Stack,
   Flex,
-  Box,
   Heading,
   Text,
-  Button,
-  Image,
-  Icon,
-  IconButton,
-  createIcon,
-  IconProps,
   useColorModeValue,
   useColorMode,
 } from "@chakra-ui/react";

@@ -12,10 +12,6 @@ import {
   useColorModeValue,
   useBreakpointValue,
   Box,
-  IconButton,
-  DarkMode,
-  SlideFade,
-  Slide,
 } from "@chakra-ui/react";
 import { SearchIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { DarkModeColors, LightModeColors } from "@/colors";

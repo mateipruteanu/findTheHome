@@ -124,6 +124,7 @@ export default function HeroSearch() {
             onClick={() => handleListingTypeToggle("For Sale")}
             roundedLeft={"full"}
             roundedRight={0}
+            w={"120px"}
           >
             For Sale
           </Button>
@@ -142,6 +143,7 @@ export default function HeroSearch() {
             onClick={() => handleListingTypeToggle("For Rent")}
             roundedRight={"full"}
             roundedLeft={0}
+            w={"120px"}
           >
             For Rent
           </Button>

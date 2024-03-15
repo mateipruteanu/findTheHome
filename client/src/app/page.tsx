@@ -1,6 +1,6 @@
 "use client";
-import HelpSection from "@/components/HelpSection";
-import HeroSection from "@/components/HeroSection";
+import HelpSection from "@/components/HomePage/HelpSection";
+import HeroSection from "@/components/HomePage/HeroSection";
 import { Container } from "@chakra-ui/react";
 import React from "react";
 

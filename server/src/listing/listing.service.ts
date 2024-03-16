@@ -8,6 +8,8 @@ import { CreateListingDto } from './dto/create-listing.dto';
 import { UserCantEditListingException } from 'src/user/exceptions/user-cant-edit-listing.exception';
 import { UserCantDeleteListingException } from 'src/user/exceptions/user-cant-delete-listing.exception';
 import Fuse from 'fuse.js';
+import { PageNumberTooHighException } from './exceptions/page-number-high.exception';
+import { PageNumberTooLowException } from './exceptions/page-number-low.exception';
 
 @Injectable()
 export class ListingService {
@@ -43,8 +45,12 @@ export class ListingService {
   }
 
   async getAll(queryParams: any) {
-    const { skip, take, orderBy, homeType, listingType, city, priceLowerThan } =
+    const { page, orderBy, homeType, listingType, city, priceLowerThan } =
       queryParams;
+
+    if (page && parseInt(page) < 1) {
+      throw new PageNumberTooLowException(page);
+    }
 
     const where = {};
     if (homeType) {
@@ -66,20 +72,39 @@ export class ListingService {
         lte: parseInt(priceLowerThan),
       };
     }
+    const totalListings = await this.prisma.listing.count({ where });
+    const take = 10;
+    const total_pages = Math.ceil(totalListings / take);
+
+    if (page && parseInt(page) > total_pages) {
+      throw new PageNumberTooHighException(page, total_pages);
+    }
+    const skip = page ? (parseInt(page) - 1) * take : undefined;
+
+    const current_page = page ? parseInt(page) : 1;
+    let next_page = page ? current_page + 1 : 1;
+    let previous_page = page ? current_page - 1 : 1;
+
+    if (current_page === total_pages) {
+      next_page = total_pages;
+    }
+    if (current_page === 1) {
+      previous_page = 1;
+    }
 
     return this.prisma.listing
       .findMany({
         include: { address: true, postedBy: true },
         where,
-        skip: skip ? parseInt(skip) : undefined,
-        take: take ? parseInt(take) : undefined,
+        skip,
+        take,
         orderBy: orderBy ? { [orderBy]: 'asc' } : undefined,
       })
       .catch((error) => {
         throw new InternalServerErrorException(error);
       })
       .then((data) => {
-        return data.map((listing) => {
+        const listings = data.map((listing) => {
           return {
             ...listing,
             postedBy: {
@@ -88,6 +113,15 @@ export class ListingService {
             },
           };
         });
+        return {
+          listings,
+          pagination: {
+            previous_page,
+            current_page,
+            next_page,
+            total_pages,
+          },
+        };
       });
   }
 

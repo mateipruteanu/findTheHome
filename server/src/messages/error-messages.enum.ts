@@ -17,4 +17,7 @@ export enum ErrorMessages {
   ListingNotFound = 'Listing not found',
   UserCantEditListing = 'User can not edit this listing because it is not theirs',
   UserCantDeleteListing = 'User can not delete this listing because it is not theirs',
+
+  PageNumberTooHigh = 'Page number exceeds the total number of pages',
+  PageNumberTooLow = 'Page number is too low',
 }

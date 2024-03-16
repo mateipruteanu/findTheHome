@@ -120,6 +120,8 @@ export class ListingService {
             current_page,
             next_page,
             total_pages,
+            records_on_page: listings.length,
+            total_records: totalListings,
           },
         };
       });

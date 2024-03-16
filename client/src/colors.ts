@@ -3,6 +3,9 @@ export class LightModeColors {
   static secondary = "#FFBE2C";
   static background = "#F8FCF9";
   static text = "#071209";
+  static specsBackground = "#E5EEF7";
+  static specsTextAndIcon = "#42709E";
+  static softGray = "#BCC1BD";
 }
 
 export class DarkModeColors {

@@ -1,7 +1,6 @@
-import Navbar from "@/components/Navbar";
 import { Box } from "@chakra-ui/react";
 
-export default function SavedHomesLayout({
+export default function SavedHomesPageLayout({
   children,
 }: {
   children: React.ReactNode;

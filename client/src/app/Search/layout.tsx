@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
 
-export default function SearchPageLayout({
+export default function LoginPageLayout({
   children,
 }: {
   children: React.ReactNode;

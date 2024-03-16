@@ -1,13 +1,17 @@
 "use client";
-import { Heading } from "@chakra-ui/react";
+import Listings from "@/components/SearchPage/Listings";
+import { Container, Heading } from "@chakra-ui/react";
 import React from "react";
 
-export default function SavedHomes() {
+export default function SavedHomesPage() {
   return (
     <>
-      <Heading as="h1" size="2xl" mb={4}>
-        Saved Homes
-      </Heading>
+      <Container maxW={"7xl"}>
+        <Heading maxW="2xl" pl={"15%"} pt={"5"}>
+          Saved homes.
+        </Heading>
+        <Listings />
+      </Container>
     </>
   );
 }

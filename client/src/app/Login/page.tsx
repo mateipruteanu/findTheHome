@@ -3,6 +3,7 @@ import { AuthContext } from "@/AuthProvider";
 import { LightModeColors } from "@/colors";
 import Listings from "@/components/SearchPage/Listings";
 import SearchBar from "@/components/SearchPage/SearchBar";
+import { Routes } from "@/routes";
 import {
   Button,
   Center,
@@ -61,7 +62,7 @@ export default function LoginPage() {
               <Flex position="relative" h="36px" alignItems="center">
                 <Button
                   as={Link}
-                  href={"/Login"}
+                  href={Routes.LOGIN}
                   bgColor={LightModeColors.primary}
                   color={LightModeColors.background}
                   variant={"solid"}
@@ -73,7 +74,7 @@ export default function LoginPage() {
                 </Button>
                 <Button
                   as={Link}
-                  href={"/Register"}
+                  href={Routes.REGISTER}
                   bgColor={LightModeColors.background}
                   color={LightModeColors.primary}
                   variant={"outline"}

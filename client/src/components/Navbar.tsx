@@ -24,6 +24,7 @@ import Link from "next/link";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "@/AuthProvider";
 import toast from "react-hot-toast";
+import { Routes } from "@/routes";
 
 export default function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -98,14 +99,24 @@ export default function Navbar() {
                     </MenuButton>
                   </Box>
                 ) : (
-                  <Button
-                    as={Link}
-                    href={"/Login"}
-                    rounded={"full"}
-                    cursor={"pointer"}
-                  >
-                    Login
-                  </Button>
+                  <Box>
+                    <Button
+                      as={Link}
+                      href={Routes.LOGIN}
+                      rounded={"full"}
+                      cursor={"pointer"}
+                    >
+                      Login
+                    </Button>
+                    <Button
+                      as={Link}
+                      href={Routes.REGISTER}
+                      rounded={"full"}
+                      cursor={"pointer"}
+                    >
+                      Register
+                    </Button>
+                  </Box>
                 )}
 
                 <MenuList alignItems={"center"}>
@@ -119,13 +130,13 @@ export default function Navbar() {
                   </Center>
                   <br />
                   <MenuDivider />
-                  <MenuItem as={Link} href={"/SavedHomes"}>
+                  <MenuItem as={Link} href={Routes.SAVED_HOMES}>
                     Saved Homes
                   </MenuItem>
-                  <MenuItem as={Link} href={"/my-homes"}>
-                    My Listings
+                  <MenuItem as={Link} href={Routes.MY_HOMES}>
+                    My Homes
                   </MenuItem>
-                  <MenuItem as={Link} href={"/Account"}>
+                  <MenuItem as={Link} href={Routes.ACCOUNT}>
                     My Account
                   </MenuItem>
                   <MenuItem onClick={handleLogoutButtonClick}>Logout</MenuItem>

@@ -2,6 +2,7 @@
 import { LightModeColors } from "@/colors";
 import Listings from "@/components/SearchPage/Listings";
 import SearchBar from "@/components/SearchPage/SearchBar";
+import { Routes } from "@/routes";
 import {
   Button,
   Center,
@@ -45,7 +46,7 @@ export default function RegisterPage() {
               >
                 <Button
                   as={Link}
-                  href={"/Login"}
+                  href={Routes.LOGIN}
                   bgColor={LightModeColors.background}
                   color={LightModeColors.primary}
                   variant={"outline"}
@@ -60,7 +61,7 @@ export default function RegisterPage() {
                 </Button>
                 <Button
                   as={Link}
-                  href={"/Register"}
+                  href={Routes.REGISTER}
                   bgColor={LightModeColors.primary}
                   color={LightModeColors.background}
                   variant={"solid"}

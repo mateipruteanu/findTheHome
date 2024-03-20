@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import { Providers } from "./providers";
+import { Toaster } from "react-hot-toast";
 
 export default function RootLayout({
   children,
@@ -11,6 +12,7 @@ export default function RootLayout({
       <body>
         <Providers>
           <Navbar />
+          <Toaster position="bottom-center" />
           {children}
         </Providers>
       </body>

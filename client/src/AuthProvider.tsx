@@ -1,0 +1,106 @@
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
+import { BACKEND_URL } from "./constants";
+
+interface AuthUser {
+  id: string;
+  name: string;
+  email: string;
+  photo: string;
+}
+
+interface DecodedToken extends AuthUser {
+  sub: string;
+  exp: number;
+}
+
+interface AuthContextProps {
+  user: AuthUser | undefined;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
+}
+
+const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
+
+const AuthProvider = ({ children }: React.PropsWithChildren) => {
+  const [user, setUser] = useState<AuthUser | undefined>(undefined);
+  const [loading, setLoading] = useState(false);
+
+  const login = async (email: string, password: string) => {
+    const response = await fetch(`${BACKEND_URL}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+    const data = await response.json();
+    if (response.ok) {
+      const decoded = jwtDecode(data.access_token) as DecodedToken;
+
+      Cookies.set("access_token", data.access_token, {
+        expires: new Date(decoded.exp * 1000),
+      });
+
+      setUser({
+        id: decoded.sub,
+        email: decoded.email,
+        name: decoded.name,
+        photo: decoded.photo,
+      });
+
+      console.log("[AuthProvider] Login successful:", data);
+    } else {
+      console.error("[AuthProvider] Login failed:", data.message);
+    }
+  };
+
+  const logout = () => {
+    Cookies.remove("access_token");
+    setUser(undefined);
+    console.log("[AuthProvider] Logged out");
+  };
+
+  const contextValue = useMemo<AuthContextProps>(
+    () => ({
+      user,
+      loading,
+      login,
+      logout,
+    }),
+    [user, loading, login, logout]
+  );
+
+  useEffect(() => {
+    setLoading(true);
+    const token = Cookies.get("access_token");
+    if (token) {
+      try {
+        const decoded = jwtDecode(token) as DecodedToken;
+        setUser({
+          id: decoded.sub,
+          email: decoded.email,
+          name: decoded.name,
+          photo: decoded.photo,
+        });
+      } catch (error) {
+        console.error("[AuthProvider] Failed to decode JWT", error);
+      }
+    }
+    setLoading(false);
+  }, []);
+
+  return (
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
+  );
+};
+
+export { AuthProvider, AuthContext };

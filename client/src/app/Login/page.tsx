@@ -1,4 +1,5 @@
 "use client";
+import { AuthContext } from "@/AuthProvider";
 import { LightModeColors } from "@/colors";
 import Listings from "@/components/SearchPage/Listings";
 import SearchBar from "@/components/SearchPage/SearchBar";
@@ -18,13 +19,32 @@ import {
 } from "@chakra-ui/react";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useContext, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const { login, logout, user } = useContext(AuthContext);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
 
   const handleLoginButtonClick = () => {
-    console.log("Login Button Clicked");
+    login(email, password)
+      .then(() => {
+        toast.success("Logged in successfully!");
+        router.push("/");
+      })
+      .catch((error) => {
+        toast.error("Could not log in :(");
+        console.error("Error logging in ", error);
+      });
+  };
+
+  const handleNewButtonClick = () => {
+    console.log("The user is now:", user);
+    toast.success("The user is now: " + user);
   };
 
   return (
@@ -71,6 +91,8 @@ export default function LoginPage() {
                   borderRadius={"full"}
                   variant={"filled"}
                   boxShadow="md"
+                  placeholder="Enter your email..."
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </FormControl>
               <FormControl id="password">
@@ -81,6 +103,8 @@ export default function LoginPage() {
                     borderRadius={"full"}
                     variant={"filled"}
                     boxShadow="md"
+                    placeholder="Enter your password..."
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                   <InputRightElement>
                     <Button

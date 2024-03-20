@@ -45,8 +45,15 @@ export class ListingService {
   }
 
   async getAll(queryParams: any) {
-    const { page, orderBy, homeType, listingType, city, priceLowerThan } =
-      queryParams;
+    const {
+      page,
+      orderBy,
+      homeType,
+      listingType,
+      city,
+      priceLowerThan,
+      posterId,
+    } = queryParams;
 
     if (page && parseInt(page) < 1) {
       throw new PageNumberTooLowException(page);
@@ -72,6 +79,10 @@ export class ListingService {
         lte: parseInt(priceLowerThan),
       };
     }
+    if (posterId) {
+      where['posterId'] = posterId;
+    }
+
     const totalListings = await this.prisma.listing.count({ where });
     const take = 10;
     const total_pages = Math.ceil(totalListings / take);

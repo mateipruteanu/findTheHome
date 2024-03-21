@@ -33,7 +33,6 @@ export default function Navbar() {
 
   const handleLogoutButtonClick = () => {
     logout();
-    toast.success("Logged out successfully!");
   };
 
   return (
@@ -90,7 +89,7 @@ export default function Navbar() {
                       rounded={"full"}
                       cursor={"pointer"}
                       minW={0}
-                      leftIcon={<Avatar size={"sm"} src={profilePhoto} />}
+                      leftIcon={<Avatar size={"sm"} src={user?.photo} />}
                       rightIcon={<ChevronDownIcon />}
                     >
                       {user?.name}

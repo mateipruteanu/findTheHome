@@ -1,4 +1,5 @@
 "use client";
+import { AuthContext } from "@/AuthProvider";
 import { LightModeColors } from "@/colors";
 import Listings from "@/components/SearchPage/Listings";
 import SearchBar from "@/components/SearchPage/SearchBar";
@@ -18,13 +19,24 @@ import {
 } from "@chakra-ui/react";
 import { IconEyeOff, IconEye } from "@tabler/icons-react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 export default function RegisterPage() {
+  const { register } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
+  const [userDetails, setUserDetails] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   const handleRegisterButtonClick = () => {
-    console.log("Login Button Clicked");
+    console.log("Register Button Clicked");
+    console.log("User Details:", userDetails);
+    const name = userDetails.firstName + " " + userDetails.lastName;
+    register(name, userDetails.email, userDetails.password, userDetails.confirmPassword);
   };
 
   return (
@@ -81,6 +93,13 @@ export default function RegisterPage() {
                     borderRadius={"full"}
                     variant={"filled"}
                     boxShadow="md"
+                    placeholder="Enter your first name..."
+                    onChange={(e) => {
+                      setUserDetails({
+                        ...userDetails,
+                        firstName: e.target.value,
+                      });
+                    }}
                   />
                 </FormControl>
                 <FormControl id="lastName" isRequired>
@@ -90,6 +109,13 @@ export default function RegisterPage() {
                     borderRadius={"full"}
                     variant={"filled"}
                     boxShadow="md"
+                    placeholder="Enter your last name..."
+                    onChange={(e) => {
+                      setUserDetails({
+                        ...userDetails,
+                        lastName: e.target.value,
+                      });
+                    }}
                   />
                 </FormControl>
               </Stack>
@@ -100,6 +126,13 @@ export default function RegisterPage() {
                   borderRadius={"full"}
                   variant={"filled"}
                   boxShadow="md"
+                  placeholder="Enter your email..."
+                  onChange={(e) => {
+                    setUserDetails({
+                      ...userDetails,
+                      email: e.target.value,
+                    });
+                  }}
                 />
               </FormControl>
               <FormControl id="password">
@@ -110,6 +143,13 @@ export default function RegisterPage() {
                     borderRadius={"full"}
                     variant={"filled"}
                     boxShadow="md"
+                    placeholder="Enter your password..."
+                    onChange={(e) => {
+                      setUserDetails({
+                        ...userDetails,
+                        password: e.target.value,
+                      });
+                    }}
                   />
                   <InputRightElement>
                     <Button
@@ -130,6 +170,13 @@ export default function RegisterPage() {
                     borderRadius={"full"}
                     variant={"filled"}
                     boxShadow="md"
+                    placeholder="Re-enter your password..."
+                    onChange={(e) => {
+                      setUserDetails({
+                        ...userDetails,
+                        confirmPassword: e.target.value,
+                      });
+                    }}
                   />
                   <InputRightElement>
                     <Button

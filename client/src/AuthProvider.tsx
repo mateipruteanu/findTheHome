@@ -8,6 +8,9 @@ import React, {
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { BACKEND_URL } from "./constants";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { Routes } from "./routes";
 
 interface AuthUser {
   id: string;
@@ -25,6 +28,12 @@ interface AuthContextProps {
   user: AuthUser | undefined;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
+  register: (
+    name: string,
+    email: string,
+    password: string,
+    confirmPassword: string
+  ) => Promise<void>;
   logout: () => void;
 }
 
@@ -33,6 +42,7 @@ const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 const AuthProvider = ({ children }: React.PropsWithChildren) => {
   const [user, setUser] = useState<AuthUser | undefined>(undefined);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const login = async (email: string, password: string) => {
     const response = await fetch(`${BACKEND_URL}/auth/login`, {
@@ -58,8 +68,11 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
       });
 
       console.log("[AuthProvider] Login successful:", data);
+      toast.success("Logged in successfully!");
+      router.push(Routes.HOME);
     } else {
       console.error("[AuthProvider] Login failed:", data.message);
+      toast.error(`Could not log in - ${data.message}`);
     }
   };
 
@@ -67,6 +80,32 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
     Cookies.remove("access_token");
     setUser(undefined);
     console.log("[AuthProvider] Logged out");
+    toast.success("Logged out successfully!");
+    router.push(Routes.HOME);
+  };
+
+  const register = async (
+    name: string,
+    email: string,
+    password: string,
+    confirmPassword: string
+  ) => {
+    const response = await fetch(`${BACKEND_URL}/auth/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, email, password, confirmPassword }),
+    });
+    const data = await response.json();
+    if (response.ok) {
+      console.log("[AuthProvider] Register successful:", data);
+      toast.success("Registered successfully!");
+      router.push(Routes.LOGIN);
+    } else {
+      console.error("[AuthProvider] Register failed:", data.message);
+      toast.error(`Could not register - ${data.message}`);
+    }
   };
 
   const contextValue = useMemo<AuthContextProps>(
@@ -74,6 +113,7 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
       user,
       loading,
       login,
+      register,
       logout,
     }),
     [user, loading, login, logout]

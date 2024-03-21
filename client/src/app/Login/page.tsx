@@ -32,15 +32,7 @@ export default function LoginPage() {
   const router = useRouter();
 
   const handleLoginButtonClick = () => {
-    login(email, password)
-      .then(() => {
-        toast.success("Logged in successfully!");
-        router.push("/");
-      })
-      .catch((error) => {
-        toast.error("Could not log in :(");
-        console.error("Error logging in ", error);
-      });
+    login(email, password);
   };
 
   const handleNewButtonClick = () => {

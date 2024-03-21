@@ -10,7 +10,7 @@ export default function SavedHomesPage() {
         <Heading maxW="2xl" pl={"15%"} pt={"5"}>
           Saved homes.
         </Heading>
-        <Listings />
+        {/* <Listings /> */}
       </Container>
     </>
   );

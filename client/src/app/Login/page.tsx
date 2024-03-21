@@ -35,10 +35,7 @@ export default function LoginPage() {
     login(email, password);
   };
 
-  const handleNewButtonClick = () => {
-    console.log("The user is now:", user);
-    toast.success("The user is now: " + user);
-  };
+
 
   return (
     <>

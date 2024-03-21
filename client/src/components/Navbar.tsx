@@ -30,8 +30,6 @@ export default function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { logout, loading, user } = useContext(AuthContext);
-  let username: string | undefined;
-  const profilePhoto = "https://i.postimg.cc/3RMWR0s6/image.jpg";
 
   const handleLogoutButtonClick = () => {
     logout();
@@ -66,9 +64,9 @@ export default function Navbar() {
             <Stack direction={"row"} spacing={7}>
               {loading ? <p>Loading...</p> : null}
 
-              <Menu>
-                {loading ? null : user ? (
-                  <Box>
+              {loading ? null : user ? (
+                <Box>
+                  <Menu>
                     <Button
                       leftIcon={
                         <PlusSquareIcon
@@ -97,51 +95,53 @@ export default function Navbar() {
                     >
                       {user?.name}
                     </MenuButton>
-                  </Box>
-                ) : (
-                  <Box>
-                    <Button
-                      as={Link}
-                      href={Routes.LOGIN}
-                      rounded={"full"}
-                      cursor={"pointer"}
-                    >
-                      Login
-                    </Button>
-                    <Button
-                      as={Link}
-                      href={Routes.REGISTER}
-                      rounded={"full"}
-                      cursor={"pointer"}
-                    >
-                      Register
-                    </Button>
-                  </Box>
-                )}
 
-                <MenuList alignItems={"center"}>
-                  <br />
-                  <Center>
-                    <Avatar size={"xl"} src={profilePhoto} />
-                  </Center>
-                  <br />
-                  <Center>
-                    <p>Welcome, {user?.name}</p>
-                  </Center>
-                  <br />
-                  <MenuDivider />
-                  <MenuItem as={Link} href={Routes.SAVED_HOMES}>
-                    Saved Homes
-                  </MenuItem>
-                  <MenuItem as={Link} href={Routes.MY_HOMES}>
-                    My Homes
-                  </MenuItem>
-                  <MenuItem as={Link} href={Routes.ACCOUNT}>
-                    My Account
-                  </MenuItem>
-                  <MenuItem onClick={handleLogoutButtonClick}>Logout</MenuItem>
-                </MenuList>
-              </Menu>
+                    <MenuList alignItems={"center"}>
+                      <br />
+                      <Center>
+                        <Avatar size={"xl"} src={user?.photo} />
+                      </Center>
+                      <br />
+                      <Center>
+                        <p>Welcome, {user?.name}</p>
+                      </Center>
+                      <br />
+                      <MenuDivider />
+                      <MenuItem as={Link} href={Routes.SAVED_HOMES}>
+                        Saved Homes
+                      </MenuItem>
+                      <MenuItem as={Link} href={Routes.MY_HOMES}>
+                        My Homes
+                      </MenuItem>
+                      <MenuItem as={Link} href={Routes.ACCOUNT}>
+                        My Account
+                      </MenuItem>
+                      <MenuItem onClick={handleLogoutButtonClick}>
+                        Logout
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
+                </Box>
+              ) : (
+                <Box>
+                  <Button
+                    as={Link}
+                    href={Routes.LOGIN}
+                    rounded={"full"}
+                    cursor={"pointer"}
+                  >
+                    Login
+                  </Button>
+                  <Button
+                    as={Link}
+                    href={Routes.REGISTER}
+                    rounded={"full"}
+                    cursor={"pointer"}
+                  >
+                    Register
+                  </Button>
+                </Box>
+              )}
 
               <Button onClick={toggleColorMode}>
                 {colorMode === "light" ? <MoonIcon /> : <SunIcon />}

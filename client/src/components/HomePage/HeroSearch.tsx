@@ -15,8 +15,13 @@ import {
 } from "@chakra-ui/react";
 import { SearchIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { DarkModeColors, LightModeColors } from "@/colors";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function HeroSearch() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const [propertyType, setPropertyType] = useState("Apartment");
   const [activeButton, setActiveButton] = useState("For Sale");
   const [searchInput, setSearchInput] = useState("");
@@ -50,6 +55,16 @@ export default function HeroSearch() {
       "in",
       searchInput.trim()
     );
+
+    const listingType = activeButton.toLowerCase().trim().includes("for sale") ? "sale" : "rent";
+
+    const searchQuery = new URLSearchParams({
+      homeType: propertyType.toLowerCase(),
+      listingType,
+      city: searchInput.trim(),
+    });
+
+    router.push(`/search?${searchQuery.toString()}`);
   };
 
   return (

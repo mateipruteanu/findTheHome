@@ -1,7 +1,6 @@
 import { DarkModeColors, LightModeColors } from "@/colors";
 import { SearchIcon, ChevronDownIcon, SettingsIcon } from "@chakra-ui/icons";
 import {
-  Box,
   Button,
   Flex,
   Input,
@@ -15,12 +14,42 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { IconAdjustmentsHorizontal } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { URLSearchParams as SearchParams }  from "url";
 
-export default function SearchBar() {
-  const [propertyType, setPropertyType] = useState("Apartment");
-  const [activeButton, setActiveButton] = useState("For Sale");
-  const [searchInput, setSearchInput] = useState("");
+
+export default function SearchBar({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
+  const router = useRouter();
+  const [propertyType, setPropertyType] = useState(() => {
+    if (searchParams.get("homeType") === "apartment") {
+      return "Apartment";
+    } else if (searchParams.get("homeType") === "house") {
+      return "House";
+    } else {
+      return "Apartment";
+    }
+  });
+  const [activeButton, setActiveButton] = useState(() => {
+    if (searchParams.get("listingType") === "sale") {
+      return "For Sale";
+    } else if (searchParams.get("listingType") === "rent") {
+      return "For Rent";
+    } else {
+      return "For Sale";
+    }
+  });
+  const [searchInput, setSearchInput] = useState(() => {
+    if (searchParams.get("city")) {
+      return searchParams.get("city") as string;
+    } else {
+      return "";
+    } 
+  });
   const searchBackground = useColorModeValue(
     LightModeColors.background,
     DarkModeColors.background
@@ -51,11 +80,25 @@ export default function SearchBar() {
       "in",
       searchInput.trim()
     );
+
+    const listingType = activeButton.toLowerCase().trim().includes("for sale")
+      ? "sale"
+      : "rent";
+
+    const searchQuery = new URLSearchParams({
+      homeType: propertyType.toLowerCase(),
+      listingType,
+      city: searchInput.trim(),
+    });
+
+    console.log(searchQuery.toString());
+
+    router.push(`/search?${searchQuery.toString()}`);    
   };
 
   const handleFiltersButtonClick = () => {
     console.log("Filters button clicked");
-  }
+  };
 
   return (
     <Flex direction="column" alignItems="center" justifyContent="center" pt={4}>
@@ -78,6 +121,7 @@ export default function SearchBar() {
             variant="outline"
             backgroundColor={searchBackground}
             h="40px"
+            value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
           />
           <Menu>

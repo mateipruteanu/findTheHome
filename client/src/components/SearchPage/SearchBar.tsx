@@ -1,3 +1,4 @@
+"use client";
 import { DarkModeColors, LightModeColors } from "@/colors";
 import { SearchIcon, ChevronDownIcon, SettingsIcon } from "@chakra-ui/icons";
 import {

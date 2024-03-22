@@ -4,7 +4,7 @@ import SearchBar from "@/components/SearchPage/SearchBar";
 import { BACKEND_URL } from "@/constants";
 import { Center, Container } from "@chakra-ui/react";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 
 export default function SearchPage() {
   const [listings, setListings] = useState([]);
@@ -30,10 +30,10 @@ export default function SearchPage() {
   return (
     <>
       <Container maxW={"7xl"}>
-        <SearchBar searchParams={searchParams} />
-        {loadingListings ? ( 
-          <Center>Loading...</Center>
-        ) : null}
+        <Suspense fallback={<Center>Loading...</Center>}>
+          <SearchBar searchParams={searchParams} />
+        </Suspense>
+        {loadingListings ? <Center>Loading...</Center> : null}
         <Listings listings={listings} />
       </Container>
     </>

@@ -19,8 +19,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function HeroSearch() {
   const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   const [propertyType, setPropertyType] = useState("Apartment");
   const [activeButton, setActiveButton] = useState("For Sale");

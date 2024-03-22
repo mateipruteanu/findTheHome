@@ -28,7 +28,7 @@ export default function HeroSearch() {
     DarkModeColors.background
   );
 
-  const searchInputWidth = useBreakpointValue({ base: "250px", md: "450px" });
+  const searchInputWidth = useBreakpointValue({ base: "100%", md: "450px" });
   const dropdownWidth = useBreakpointValue({
     base: "130px",
     sm: "140px",
@@ -54,7 +54,9 @@ export default function HeroSearch() {
       searchInput.trim()
     );
 
-    const listingType = activeButton.toLowerCase().trim().includes("for sale") ? "sale" : "rent";
+    const listingType = activeButton.toLowerCase().trim().includes("for sale")
+      ? "sale"
+      : "rent";
 
     const searchQuery = new URLSearchParams({
       homeType: propertyType.toLowerCase(),
@@ -114,6 +116,7 @@ export default function HeroSearch() {
           aria-label="Search"
           ml={2}
           h="50px"
+          display={{ base: "none", md: "block" }}
           onClick={handleSearchButtonClick}
         >
           Search
@@ -121,7 +124,12 @@ export default function HeroSearch() {
       </Flex>
 
       <Flex justify="left" wrap="wrap" pt={4}>
-        <Flex position="relative" h="36px" alignItems="center">
+        <Flex
+          position="relative"
+          h="36px"
+          alignItems="center"
+          w={{ base: "100%"}}
+        >
           <Button
             bgColor={
               activeButton === "For Sale"
@@ -137,7 +145,7 @@ export default function HeroSearch() {
             onClick={() => handleListingTypeToggle("For Sale")}
             roundedLeft={"full"}
             roundedRight={0}
-            w={"120px"}
+            w={{ base: "50%", md: "120px" }}
           >
             For Sale
           </Button>
@@ -156,12 +164,27 @@ export default function HeroSearch() {
             onClick={() => handleListingTypeToggle("For Rent")}
             roundedRight={"full"}
             roundedLeft={0}
-            w={"120px"}
+            w={{ base: "50%", md: "120px" }}
           >
             For Rent
           </Button>
         </Flex>
       </Flex>
+      <Button
+        leftIcon={<SearchIcon />}
+        bg={LightModeColors.secondary}
+        rounded="full"
+        boxShadow="md"
+        minWidth={searchButtonWidth}
+        aria-label="Search"
+        h="50px"
+        my={4}
+        w={"100%"}
+        display={{ base: "block", md: "none" }}
+        onClick={handleSearchButtonClick}
+      >
+        Search
+      </Button>
     </Box>
   );
 }

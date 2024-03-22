@@ -41,7 +41,13 @@ export default function HeroSection() {
         </Heading>
         <HeroSearch />
       </Stack>
-      <Flex flex={1} justify={"center"} align={"center"} position={"relative"}>
+      <Flex
+        flex={1}
+        justify={"center"}
+        align={"center"}
+        position={"relative"}
+        display={{ base: "none", md: "flex" }}
+      >
         <HeroSVG />
       </Flex>
     </Stack>

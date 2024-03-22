@@ -47,6 +47,7 @@ export default function RegisterPage() {
             src="./loginRegisterSvg.svg"
             alt="findTheHome Image"
             height={"80vh"}
+            display={{ base: "none", md: "block" }}
           />
           <Center flex={1} alignContent={"center"} justifyContent={"center"}>
             <Stack>

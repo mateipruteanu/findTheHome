@@ -1,4 +1,5 @@
 import { Box } from "@chakra-ui/react";
+import { Suspense } from "react";
 
 export default function LoginPageLayout({
   children,
@@ -7,7 +8,9 @@ export default function LoginPageLayout({
 }) {
   return (
     <Box>
-      <Box>{children}</Box>
+      <Box>
+        <Suspense>{children}</Suspense>
+      </Box>
     </Box>
   );
 }

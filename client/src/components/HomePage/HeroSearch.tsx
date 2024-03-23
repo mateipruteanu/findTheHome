@@ -116,7 +116,7 @@ export default function HeroSearch() {
           aria-label="Search"
           ml={2}
           h="50px"
-          display={{ base: "none", md: "block" }}
+          display={{ base: "none", md: "flex" }}
           onClick={handleSearchButtonClick}
         >
           Search

@@ -17,8 +17,7 @@ import {
 import { IconAdjustmentsHorizontal } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { URLSearchParams as SearchParams }  from "url";
-
+import { URLSearchParams as SearchParams } from "url";
 
 export default function SearchBar({
   searchParams,
@@ -49,14 +48,14 @@ export default function SearchBar({
       return searchParams.get("city") as string;
     } else {
       return "";
-    } 
+    }
   });
   const searchBackground = useColorModeValue(
     LightModeColors.background,
     DarkModeColors.background
   );
 
-  const searchInputWidth = useBreakpointValue({ base: "250px", md: "450px" });
+  const searchInputWidth = useBreakpointValue({ base: "100%", md: "450px" });
   const dropdownWidth = useBreakpointValue({
     base: "130px",
     sm: "140px",
@@ -94,7 +93,7 @@ export default function SearchBar({
 
     console.log(searchQuery.toString());
 
-    router.push(`/search?${searchQuery.toString()}`);    
+    router.push(`/search?${searchQuery.toString()}`);
   };
 
   const handleFiltersButtonClick = () => {
@@ -110,7 +109,13 @@ export default function SearchBar({
         alignItems="center"
         w="full"
       >
-        <InputGroup maxWidth={searchInputWidth} flexGrow={1} mr={2} h="40px">
+        <InputGroup
+          maxWidth={searchInputWidth}
+          flexGrow={1}
+          mr={2}
+          h="40px"
+          mb={{ base: 2, md: 0 }}
+        >
           <InputLeftElement pointerEvents="none" h="40px">
             <SearchIcon color="gray.300" />
           </InputLeftElement>
@@ -160,6 +165,7 @@ export default function SearchBar({
           ml={2}
           h="40px"
           onClick={handleFiltersButtonClick}
+          display={{ base: "none", md: "flex" }}
         >
           Filters
         </Button>
@@ -173,6 +179,7 @@ export default function SearchBar({
           ml={2}
           h="40px"
           onClick={handleSearchButtonClick}
+          display={{ base: "none", md: "flex" }}
         >
           Search
         </Button>
@@ -184,9 +191,14 @@ export default function SearchBar({
         alignItems="center"
         w="full"
         maxW={"3xl"}
-        pl={5}
+        pl={{ base: 0, md: 5 }}
       >
-        <Flex position="relative" h="36px" alignItems="center">
+        <Flex
+          position="relative"
+          h="36px"
+          alignItems="center"
+          w={{ base: "100%" }}
+        >
           <Button
             bgColor={
               activeButton === "For Sale"
@@ -203,7 +215,7 @@ export default function SearchBar({
             roundedLeft={"full"}
             roundedRight={0}
             h={"26px"}
-            w={"120px"}
+            w={{ base: "50%", md: "120px" }}
           >
             For Sale
           </Button>
@@ -223,12 +235,41 @@ export default function SearchBar({
             roundedRight={"full"}
             roundedLeft={0}
             h={"26px"}
-            w={"120px"}
+            w={{ base: "50%", md: "120px" }}
           >
             For Rent
           </Button>
         </Flex>
       </Flex>
+      <Button
+        leftIcon={<IconAdjustmentsHorizontal />}
+        bg={"transparent"}
+        border="1px"
+        borderColor={LightModeColors.softGray}
+        rounded="full"
+        boxShadow="md"
+        width={"100%"}
+        my={2}
+        aria-label="Search"
+        h="40px"
+        onClick={handleFiltersButtonClick}
+        display={{ base: "flex", md: "none" }}
+      >
+        Filters
+      </Button>
+      <Button
+        leftIcon={<SearchIcon />}
+        bg={LightModeColors.secondary}
+        rounded="full"
+        boxShadow="md"
+        width={"100%"}
+        aria-label="Search"
+        h="40px"
+        onClick={handleSearchButtonClick}
+        display={{ base: "block", md: "none" }}
+      >
+        Search
+      </Button>
     </Flex>
   );
 }

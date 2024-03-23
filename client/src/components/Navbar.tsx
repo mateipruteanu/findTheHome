@@ -128,6 +128,7 @@ export default function Navbar() {
                     href={Routes.LOGIN}
                     rounded={"full"}
                     cursor={"pointer"}
+
                   >
                     Login
                   </Button>
@@ -136,6 +137,7 @@ export default function Navbar() {
                     href={Routes.REGISTER}
                     rounded={"full"}
                     cursor={"pointer"}
+                    display={{ base: "none", md: "flex" }}
                   >
                     Register
                   </Button>

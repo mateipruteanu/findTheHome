@@ -15,6 +15,11 @@
 - 👷‍♂️ Currently working on the frontend
 
 ## Can I see it?
+Sure, go to [findthehome.mateipruteanu.dev](https://findthehome.mateipruteanu.dev/) to check it out.
+
+Currently, only the frontend is being hosted, this is why there aren't any listings & you can't log in.
+
+I plan on hosting the backend in the future as well.
 
 <img src="https://github.com/mateipruteanu/findTheHome-LicenseProject/assets/35728927/f31c1bb5-a1d0-4007-bf05-a2ed30711212" height="350" alt="homepage">
 <img src="https://github.com/mateipruteanu/findTheHome-LicenseProject/assets/35728927/3d9f33a1-0aa1-431a-9430-4f25210d104a" height="350" alt="searchPage">

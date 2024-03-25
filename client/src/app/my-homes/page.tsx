@@ -36,7 +36,7 @@ export default function MyHomesPage() {
             <Heading as={"h2"}>Loading...</Heading>
           </Center>
         ) : listings ? (
-          <Listings listings={listings} />
+          <Listings listings={listings} type={"my-homes"} />
         ) : (
           <Center>
             <Heading as={"h2"}>No listings found.</Heading>

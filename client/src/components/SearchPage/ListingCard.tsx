@@ -20,8 +20,15 @@ import {
   IconRuler2,
 } from "@tabler/icons-react";
 import SpecsButton from "./SpecsButton";
+import ListingOptions from "../ListingOptions";
 
-export default function ListingCard({ listing }: { listing: Listing }) {
+export default function ListingCard({
+  listing,
+  type,
+}: {
+  listing: Listing;
+  type: "my-homes" | undefined;
+}) {
   return (
     <Center py={6}>
       <Stack
@@ -124,27 +131,31 @@ export default function ListingCard({ listing }: { listing: Listing }) {
             justifyContent={{ base: "start", md: "end" }}
             alignItems={"end"}
           >
-            <Button
-              borderRadius={"full"}
-              py={"6"}
-              bgColor={useColorModeValue(
-                LightModeColors.background,
-                "blue.800"
-              )}
-              border={"1px"}
-              borderColor={LightModeColors.softGray}
-              _hover={{
-                bgColor: LightModeColors.background,
-              }}
-              boxShadow="md"
-            >
-              <IconBookmark
-                color={useColorModeValue(
-                  LightModeColors.text,
-                  DarkModeColors.text
+            {type === "my-homes" ? (
+              <ListingOptions listing={listing} />
+            ) : (
+              <Button
+                borderRadius={"full"}
+                py={"6"}
+                bgColor={useColorModeValue(
+                  LightModeColors.background,
+                  "blue.800"
                 )}
-              />
-            </Button>
+                border={"1px"}
+                borderColor={LightModeColors.softGray}
+                _hover={{
+                  bgColor: LightModeColors.background,
+                }}
+                boxShadow="md"
+              >
+                <IconBookmark
+                  color={useColorModeValue(
+                    LightModeColors.text,
+                    DarkModeColors.text
+                  )}
+                />
+              </Button>
+            )}
           </Flex>
         </Stack>
       </Stack>

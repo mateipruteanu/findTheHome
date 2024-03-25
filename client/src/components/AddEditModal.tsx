@@ -85,11 +85,21 @@ export default function AddEditModal({
         </ModalBody>
 
         <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={OnClose}>
+          <Button
+            mr={3}
+            onClick={OnClose}
+            variant={"ghost"}
+            borderRadius={"full"}
+          >
             Close
           </Button>
-          <Button colorScheme="green" onClick={handleAddSaveButtonClick}>
-            {mode === "add" ? "Add" : "Save"}
+          <Button
+            variant="solid"
+            colorScheme="green"
+            borderRadius={"full"}
+            onClick={handleAddSaveButtonClick}
+          >
+            {mode === "add" ? "Add Listing" : "Save Listing"}
           </Button>
         </ModalFooter>
       </ModalContent>

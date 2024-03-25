@@ -29,7 +29,7 @@ export class ListingService {
       address: {
         create: listing.address,
       },
-      image: '',
+      image: listing.image ? listing.image : '',
     };
 
     return this.prisma.listing

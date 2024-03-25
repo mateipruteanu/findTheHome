@@ -25,6 +25,7 @@ import { useContext, useEffect } from "react";
 import { AuthContext } from "@/AuthProvider";
 import toast from "react-hot-toast";
 import { Routes } from "@/routes";
+import AddEditModal from "./AddEditModal";
 
 export default function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -33,6 +34,10 @@ export default function Navbar() {
 
   const handleLogoutButtonClick = () => {
     logout();
+  };
+
+  const handleAddListingButtonClick = () => {
+    onOpen();
   };
 
   return (
@@ -78,9 +83,7 @@ export default function Navbar() {
                       }
                       variant={"outline"}
                       rounded="full"
-                      onClick={() =>
-                        console.log("[NotImplemented] Add Listing")
-                      }
+                      onClick={handleAddListingButtonClick}
                     >
                       Add Listing
                     </Button>
@@ -150,6 +153,7 @@ export default function Navbar() {
           </Flex>
         </Flex>
       </Box>
+      <AddEditModal isOpen={isOpen} OnClose={onClose} mode={'add'} />
     </>
   );
 }

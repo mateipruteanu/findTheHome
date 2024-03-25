@@ -27,7 +27,7 @@ export default function ListingCard({
   type,
 }: {
   listing: Listing;
-  type: "my-homes" | undefined;
+  type?: "my-homes";
 }) {
   return (
     <Center py={6}>

@@ -7,7 +7,7 @@ export default function Listings({
   type,
 }: {
   listings: Listing[];
-  type: "my-homes" | undefined;
+  type?: "my-homes";
 }) {
   return (
     <Box>
@@ -15,7 +15,7 @@ export default function Listings({
         <Box>
           {listings.map((listing) => (
             <Box key={listing.id}>
-              <ListingCard listing={listing} type={"my-homes"} />
+              <ListingCard listing={listing} type={type} />
             </Box>
           ))}
         </Box>

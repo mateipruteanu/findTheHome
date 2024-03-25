@@ -91,14 +91,14 @@ export default function ListingModalForm({
             onChange={(e) => {
               setListingDetails({
                 ...listingDetails,
-                price: e.target.value,
+                price: parseFloat(e.target.value),
               });
             }}
           />
         </InputGroup>
       </FormControl>
       <Stack direction={"row"}>
-        <FormControl id="numOfBeds" isRequired>
+        <FormControl id="numofbeds" isRequired>
           <FormLabel>Number of Beds</FormLabel>
           <Input
             type="number"
@@ -109,12 +109,12 @@ export default function ListingModalForm({
             onChange={(e) => {
               setListingDetails({
                 ...listingDetails,
-                numOfBeds: e.target.value,
+                numOfBeds: parseInt(e.target.value),
               });
             }}
           />
         </FormControl>
-        <FormControl id="numOfBaths" isRequired>
+        <FormControl id="numofbaths" isRequired>
           <FormLabel>Number of Baths</FormLabel>
           <Input
             type="number"
@@ -125,12 +125,12 @@ export default function ListingModalForm({
             onChange={(e) => {
               setListingDetails({
                 ...listingDetails,
-                numOfBaths: e.target.value,
+                numOfBaths: parseInt(e.target.value),
               });
             }}
           />
         </FormControl>
-        <FormControl id="numOfMeterSquared" isRequired>
+        <FormControl id="numofmetersquared" isRequired>
           <FormLabel>Number of m²</FormLabel>
           <Input
             type="number"
@@ -141,14 +141,14 @@ export default function ListingModalForm({
             onChange={(e) => {
               setListingDetails({
                 ...listingDetails,
-                numOfMeterSquared: e.target.value,
+                numOfMeterSquared: parseInt(e.target.value),
               });
             }}
           />
         </FormControl>
       </Stack>
       <Stack direction={"row"}>
-        <FormControl id="homeType" isRequired>
+        <FormControl id="hometype" isRequired>
           <FormLabel>Home Type</FormLabel>
           <Menu>
             <MenuButton
@@ -189,7 +189,7 @@ export default function ListingModalForm({
             </MenuList>
           </Menu>
         </FormControl>
-        <FormControl id="listingType" isRequired>
+        <FormControl id="listingtype" isRequired>
           <FormLabel>Listing Type</FormLabel>
           <Menu>
             <MenuButton

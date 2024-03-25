@@ -12,6 +12,7 @@ import { useState } from "react";
 import { Listing } from "@/entities/Listing";
 import { CreateListingDTO } from "@/dtos/CreateListingDTO";
 import copyListingToDTO from "@/utils/copyListingtoDTO";
+import useAddListing from "@/hooks/useAddListing";
 
 export default function AddEditModal({
   mode,
@@ -24,7 +25,7 @@ export default function AddEditModal({
   OnClose: () => void;
   listing?: Listing;
 }) {
-  let initialListing: CreateListingDTO = {
+  const emptyListing: CreateListingDTO = {
     title: "",
     description: "",
     price: 0,
@@ -41,16 +42,23 @@ export default function AddEditModal({
     numOfBeds: 0,
     numOfMeterSquared: 0,
   };
+  let initialListing: CreateListingDTO;
   if (listing) {
     initialListing = copyListingToDTO(listing);
+  } else {
+    initialListing = emptyListing;
   }
 
   const [listingDetails, setListingDetails] = useState(initialListing);
+  const { isLoading, error, addListing } = useAddListing();
 
-  const handleAddSaveButtonClick = () => {
+  const handleAddSaveButtonClick = async () => {
     if (mode === "add") {
-      console.log("Add button clicked");
-      console.log("Listing Details:", listingDetails);
+      await addListing(listingDetails);
+      if (!isLoading && !error) {
+        OnClose();
+        setListingDetails(emptyListing);
+      }
     } else {
       console.log("Save button clicked");
       console.log("Listing Details:", listingDetails);

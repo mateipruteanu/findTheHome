@@ -10,6 +10,7 @@ export default function useAddListing() {
 
   const addListing = async (createListingDTO: CreateListingDTO) => {
     setIsLoading(true);
+    toast.loading("Adding listing...");
     setError(null);
     try {
       const token = Cookies.get("access_token");
@@ -24,14 +25,17 @@ export default function useAddListing() {
       const data = await response.json();
       if (response.ok) {
         console.log("[useAddListing] Listing added successfully:", data);
+        toast.dismiss();
         toast.success("Listing added successfully!");
       } else {
         console.error("[useAddListing] Failed to add listing:", data.message);
+        toast.dismiss();
         toast.error(`Could not add listing - ${data.message}`);
         setError(data.message);
       }
     } catch (error) {
       console.error("[useAddListing] Failed to add listing:", error);
+      toast.dismiss();
       toast.error(`Could not add listing - ${error}`);
       setError("Failed to add listing");
     } finally {

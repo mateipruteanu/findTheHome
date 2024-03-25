@@ -45,6 +45,7 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
   const router = useRouter();
 
   const login = async (email: string, password: string) => {
+    toast.loading("Logging in...");
     const response = await fetch(`${BACKEND_URL}/auth/login`, {
       method: "POST",
       headers: {
@@ -68,10 +69,12 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
       });
 
       console.log("[AuthProvider] Login successful:", data);
+      toast.dismiss();
       toast.success("Logged in successfully!");
       router.push(Routes.HOME);
     } else {
       console.error("[AuthProvider] Login failed:", data.message);
+      toast.dismiss();
       toast.error(`Could not log in - ${data.message}`);
     }
   };
@@ -90,6 +93,7 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
     password: string,
     confirmPassword: string
   ) => {
+    toast.loading("Registering...");
     const response = await fetch(`${BACKEND_URL}/auth/register`, {
       method: "POST",
       headers: {
@@ -100,10 +104,12 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
     const data = await response.json();
     if (response.ok) {
       console.log("[AuthProvider] Register successful:", data);
+      toast.dismiss();
       toast.success("Registered successfully!");
       router.push(Routes.LOGIN);
     } else {
       console.error("[AuthProvider] Register failed:", data.message);
+      toast.dismiss();
       toast.error(`Could not register - ${data.message}`);
     }
   };

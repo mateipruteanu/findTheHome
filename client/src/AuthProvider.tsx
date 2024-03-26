@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { Routes } from "./routes";
 
-interface AuthUser {
+export interface AuthUser {
   id: string;
   name: string;
   email: string;

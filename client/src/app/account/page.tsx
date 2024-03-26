@@ -45,29 +45,26 @@ export default function Account() {
   }, [user]);
 
   const handleDeleteClick = () => {
-    // @TODO
-    console.log("Delete clicked for user with id: ", (userInfo as AuthUser).id);
-    toast.success("Account deleted successfully.");
+    const data = deleteAccount((userInfo as AuthUser).id);
+
+    if (!data) {
+      return;
+    }
     onClose();
     logout();
   };
 
   const onCancelButtonClick = () => {
-    // @TODO
-    console.log("Cancel clicked for user with id: ", (userInfo as AuthUser).id);
+    router.back();
   };
 
-  const onSaveButtonClick = () => {
-    // @TODO
+  const onSaveButtonClick = async () => {
     if (!userInfo) {
       toast.error("Could not save changes - user info is missing.");
       return;
     }
     if (userInfo.password !== userInfo.confirmPassword) {
-      toast.error(
-        `Passwords do not match., ${userInfo.password}, ${userInfo.confirmPassword}`
-      );
-
+      toast.error(`Passwords do not match.`);
       return;
     }
 
@@ -78,7 +75,13 @@ export default function Account() {
       password: userInfo.password,
     };
     console.log("Updating user with this", updateAccountDTO);
-    // updateAccount((userInfo as AuthUser).id, userInfo as UpdateAccountDTO);
+    const data = await updateAccount(
+      (userInfo as AuthUser).id,
+      userInfo as UpdateAccountDTO
+    );
+    if (data) {
+      router.refresh();
+    }
   };
 
   return (

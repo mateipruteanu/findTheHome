@@ -8,6 +8,7 @@ import {
   Input,
   Divider,
 } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 
 export default function UserInfo({
   userInfo,
@@ -16,6 +17,17 @@ export default function UserInfo({
   userInfo: any;
   setUserInfo: any;
 }) {
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  useEffect(() => {
+    setUserInfo({
+      ...userInfo,
+      password: password,
+      confirmPassword: confirmPassword,
+    });
+  }, [password, confirmPassword]);
+
   return (
     <Stack direction={"column"}>
       <Stack direction={"row"} justifyContent={"center"}>
@@ -46,7 +58,7 @@ export default function UserInfo({
             onChange={(e) => {
               setUserInfo({
                 ...userInfo,
-                image: userInfo.name.split(" ")[0] + " " + e.target.value,
+                name: userInfo.name.split(" ")[0] + " " + e.target.value,
               });
             }}
           />
@@ -79,10 +91,7 @@ export default function UserInfo({
             boxShadow="md"
             placeholder="*********"
             onChange={(e) => {
-              setUserInfo({
-                ...userInfo,
-                password: e.target.value,
-              });
+              setPassword(e.target.value);
             }}
           />
         </FormControl>
@@ -95,10 +104,7 @@ export default function UserInfo({
             boxShadow="md"
             placeholder="*********"
             onChange={(e) => {
-              setUserInfo({
-                ...userInfo,
-                confirmPassword: e.target.value,
-              });
+              setConfirmPassword(e.target.value);
             }}
           />
         </FormControl>

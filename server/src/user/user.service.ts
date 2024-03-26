@@ -9,6 +9,7 @@ import { Messages } from 'src/messages/messages.enum';
 import { ListingNotFoundException } from 'src/listing/exceptions/listing-not-found.exception';
 import { CannotDeleteAccountException } from './exceptions/cannot-delete-account.exception';
 import { CannotUpdateAccountException } from './exceptions/cannot-update-account.exception';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -106,6 +107,10 @@ export class UserService {
 
     if (id.id !== userId && !isUserAdmin) {
       throw new CannotUpdateAccountException();
+    }
+
+    if (updateUserDto.password) {
+      updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
     }
 
     return this.prisma.user

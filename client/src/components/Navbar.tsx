@@ -21,9 +21,8 @@ import { Image } from "@chakra-ui/next-js";
 import { PlusSquareIcon } from "@chakra-ui/icons";
 import { DarkModeColors, LightModeColors } from "@/colors";
 import Link from "next/link";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { AuthContext } from "@/AuthProvider";
-import toast from "react-hot-toast";
 import { Routes } from "@/routes";
 import AddEditModal from "./AddEditModal";
 
@@ -125,7 +124,7 @@ export default function Navbar() {
                   </Menu>
                 </Box>
               ) : (
-                <Box>
+                <Stack direction={'row'}>
                   <Button
                     as={Link}
                     href={Routes.LOGIN}
@@ -139,11 +138,11 @@ export default function Navbar() {
                     href={Routes.REGISTER}
                     rounded={"full"}
                     cursor={"pointer"}
-                    display={{ base: "none", md: "initial" }}
+                    display={{ base: "none", md: "flex" }}
                   >
                     Register
                   </Button>
-                </Box>
+                </Stack>
               )}
 
               <Button onClick={toggleColorMode}>
@@ -153,7 +152,7 @@ export default function Navbar() {
           </Flex>
         </Flex>
       </Box>
-      <AddEditModal isOpen={isOpen} OnClose={onClose} mode={'add'} />
+      <AddEditModal isOpen={isOpen} OnClose={onClose} mode={"add"} />
     </>
   );
 }

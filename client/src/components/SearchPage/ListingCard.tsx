@@ -21,6 +21,7 @@ import {
 } from "@tabler/icons-react";
 import SpecsButton from "./SpecsButton";
 import ListingOptions from "../ListingOptions";
+import { useRouter } from "next/navigation";
 
 export default function ListingCard({
   listing,
@@ -29,6 +30,8 @@ export default function ListingCard({
   listing: Listing;
   type?: "my-homes";
 }) {
+  const router = useRouter();
+
   return (
     <Center py={6}>
       <Stack
@@ -64,7 +67,14 @@ export default function ListingCard({
           pt={2}
         >
           <Text fontWeight={600} color={"gray.500"} size="sm">
-            {listing.postedBy.name}
+            <Button
+              variant={"link"}
+              onClick={() => {
+                router.push(`/user/${listing.postedBy.id}`);
+              }}
+            >
+              {listing.postedBy.name}
+            </Button>
           </Text>
           <Heading fontSize={"2xl"} fontFamily={"body"}>
             {listing.title}

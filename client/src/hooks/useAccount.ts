@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 export default function useAccount() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [account, setAccount] = useState<UpdateAccountDTO | null>(null);
 
   const getAccount = async (id: string) => {
     setIsLoading(true);
@@ -16,7 +17,7 @@ export default function useAccount() {
       const data = await response.json();
       if (response.ok) {
         console.log("[useAccount] Account fetched successfully:", data);
-        return data;
+        setAccount(data);
       } else {
         console.error("[useAccount] Failed to fetch account:", data.message);
         toast.error(`Could not fetch account - ${data.message}`);
@@ -108,5 +109,5 @@ export default function useAccount() {
     }
   };
 
-  return { isLoading, error, getAccount, updateAccount, deleteAccount };
+  return { isLoading, error, getAccount, updateAccount, deleteAccount, account };
 }

@@ -28,8 +28,7 @@ import { useRouter } from "next/navigation";
 export default function Account() {
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isLoading, error, getAccount, updateAccount, deleteAccount } =
-    useAccount();
+  const { updateAccount, deleteAccount } = useAccount();
   const cancelRef = useRef<HTMLButtonElement>(null);
   const { user, logout } = useContext(AuthContext);
 

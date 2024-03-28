@@ -36,7 +36,7 @@ export default function UserPage({ params }: { params: { id: string } }) {
             <Heading as={"h2"}>Loading...</Heading>
           </Center>
         ) : listings ? (
-          <Listings listings={listings} type={"my-homes"} />
+          <Listings listings={listings} />
         ) : (
           <Center>
             <Heading as={"h2"}>No listings found.</Heading>

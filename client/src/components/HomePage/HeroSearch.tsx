@@ -70,7 +70,13 @@ export default function HeroSearch() {
   return (
     <Box>
       <Flex justify="left" wrap="wrap" h="50px">
-        <InputGroup maxWidth={searchInputWidth} flexGrow={1} mr={2} h="50px">
+        <InputGroup
+          maxWidth={searchInputWidth}
+          flexGrow={1}
+          mr={2}
+          h="50px"
+          zIndex={"10"}
+        >
           <InputLeftElement pointerEvents="none" h="50px">
             <SearchIcon color="gray.300" />
           </InputLeftElement>
@@ -128,7 +134,7 @@ export default function HeroSearch() {
           position="relative"
           h="36px"
           alignItems="center"
-          w={{ base: "100%"}}
+          w={{ base: "100%" }}
         >
           <Button
             bgColor={

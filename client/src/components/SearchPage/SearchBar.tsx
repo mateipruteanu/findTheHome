@@ -115,6 +115,7 @@ export default function SearchBar({
           mr={2}
           h="40px"
           mb={{ base: 2, md: 0 }}
+          zIndex={"10"}
         >
           <InputLeftElement pointerEvents="none" h="40px">
             <SearchIcon color="gray.300" />

@@ -23,10 +23,12 @@ import {
 } from "@tabler/icons-react";
 import useDeleteListing from "@/hooks/useDeleteListing";
 import { useRef } from "react";
+import AddEditModal from "./AddEditModal";
 
 export default function ListingOptions({ listing }: { listing: Listing }) {
   const { isLoading, error, deleteListing } = useDeleteListing();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const deleteModal = useDisclosure();
+  const editModal = useDisclosure();
   const cancelRef = useRef<HTMLButtonElement>(null);
 
   const handleEditClick = () => {
@@ -35,7 +37,7 @@ export default function ListingOptions({ listing }: { listing: Listing }) {
 
   const handleDeleteClick = async () => {
     await deleteListing(listing.id);
-    onClose();
+    deleteModal.onClose();
     setTimeout(() => window.location.reload(), 1000);
   };
 
@@ -58,7 +60,7 @@ export default function ListingOptions({ listing }: { listing: Listing }) {
               <Button
                 variant={"ghost"}
                 leftIcon={<IconEditCircle />}
-                onClick={handleEditClick}
+                onClick={editModal.onOpen}
                 borderRadius={"full"}
               >
                 Edit
@@ -66,7 +68,7 @@ export default function ListingOptions({ listing }: { listing: Listing }) {
               <Button
                 variant={"ghost"}
                 leftIcon={<IconEraser />}
-                onClick={onOpen}
+                onClick={deleteModal.onOpen}
                 borderRadius={"full"}
                 colorScheme="red"
               >
@@ -77,9 +79,9 @@ export default function ListingOptions({ listing }: { listing: Listing }) {
         </PopoverContent>
       </Popover>
       <AlertDialog
-        isOpen={isOpen}
+        isOpen={deleteModal.isOpen}
         leastDestructiveRef={cancelRef}
-        onClose={onClose}
+        onClose={deleteModal.onClose}
       >
         <AlertDialogOverlay>
           <AlertDialogContent borderRadius={"xl"}>
@@ -92,7 +94,7 @@ export default function ListingOptions({ listing }: { listing: Listing }) {
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose} borderRadius={"full"}>
+              <Button ref={cancelRef} onClick={deleteModal.onClose} borderRadius={"full"}>
                 Cancel
               </Button>
               <Button
@@ -107,6 +109,7 @@ export default function ListingOptions({ listing }: { listing: Listing }) {
           </AlertDialogContent>
         </AlertDialogOverlay>
       </AlertDialog>
+      <AddEditModal isOpen={editModal.isOpen} OnClose={editModal.onClose} mode={"edit"} listing={listing} />
     </>
   );
 }

@@ -13,6 +13,7 @@ import { Listing } from "@/entities/Listing";
 import { CreateListingDTO } from "@/dtos/CreateListingDTO";
 import copyListingToDTO from "@/utils/copyListingtoDTO";
 import useAddListing from "@/hooks/useAddListing";
+import useUpdateListing from "@/hooks/useUpdateListing";
 
 export default function AddEditModal({
   mode,
@@ -50,18 +51,30 @@ export default function AddEditModal({
   }
 
   const [listingDetails, setListingDetails] = useState(initialListing);
-  const { isLoading, error, addListing } = useAddListing();
+  const {
+    addListing,
+    isLoading: isAdding,
+    error: addingError,
+  } = useAddListing();
+  const {
+    updateListing,
+    isLoading: isUpdating,
+    error: updatingError,
+  } = useUpdateListing();
 
   const handleAddSaveButtonClick = async () => {
     if (mode === "add") {
       await addListing(listingDetails);
-      if (!isLoading && !error) {
+      if (!isAdding && !addingError) {
         OnClose();
         setListingDetails(emptyListing);
       }
     } else {
-      console.log("Save button clicked");
-      console.log("Listing Details:", listingDetails);
+      await updateListing(listing?.id || "", listingDetails);
+      if (!isUpdating && !updatingError) {
+        OnClose();
+        setListingDetails(emptyListing);
+      }
     }
   };
 

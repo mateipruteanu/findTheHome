@@ -33,6 +33,7 @@ export default function ListingModalForm({
             variant={"filled"}
             boxShadow="md"
             placeholder="Enter image URL..."
+            value={listingDetails.image}
             onChange={(e) => {
               setListingDetails({
                 ...listingDetails,
@@ -49,6 +50,7 @@ export default function ListingModalForm({
             variant={"filled"}
             boxShadow="md"
             placeholder="Enter listing title..."
+            value={listingDetails.title}
             onChange={(e) => {
               setListingDetails({
                 ...listingDetails,
@@ -65,6 +67,7 @@ export default function ListingModalForm({
           variant={"filled"}
           boxShadow="md"
           placeholder="Enter a description..."
+          value={listingDetails.description}
           onChange={(e) => {
             setListingDetails({
               ...listingDetails,
@@ -88,6 +91,7 @@ export default function ListingModalForm({
             variant={"filled"}
             boxShadow="md"
             placeholder="Enter the price..."
+            value={listingDetails.price}
             onChange={(e) => {
               setListingDetails({
                 ...listingDetails,
@@ -106,6 +110,7 @@ export default function ListingModalForm({
             variant={"filled"}
             boxShadow="md"
             placeholder="Enter the number of beds..."
+            value={listingDetails.numOfBeds}
             onChange={(e) => {
               setListingDetails({
                 ...listingDetails,
@@ -122,6 +127,7 @@ export default function ListingModalForm({
             variant={"filled"}
             boxShadow="md"
             placeholder="Enter the number of baths..."
+            value={listingDetails.numOfBaths}
             onChange={(e) => {
               setListingDetails({
                 ...listingDetails,
@@ -138,6 +144,7 @@ export default function ListingModalForm({
             variant={"filled"}
             boxShadow="md"
             placeholder="Enter the number of m²..."
+            value={listingDetails.numOfMeterSquared}
             onChange={(e) => {
               setListingDetails({
                 ...listingDetails,
@@ -243,6 +250,7 @@ export default function ListingModalForm({
             variant={"filled"}
             boxShadow="md"
             placeholder="Enter the country..."
+            value={listingDetails.address.country}
             onChange={(e) => {
               setListingDetails({
                 ...listingDetails,
@@ -259,6 +267,7 @@ export default function ListingModalForm({
             variant={"filled"}
             boxShadow="md"
             placeholder="Enter the city..."
+            value={listingDetails.address.city}
             onChange={(e) => {
               setListingDetails({
                 ...listingDetails,
@@ -277,6 +286,7 @@ export default function ListingModalForm({
             variant={"filled"}
             boxShadow="md"
             placeholder="Enter the street..."
+            value={listingDetails.address.street}
             onChange={(e) => {
               setListingDetails({
                 ...listingDetails,
@@ -293,6 +303,7 @@ export default function ListingModalForm({
             variant={"filled"}
             boxShadow="md"
             placeholder="Enter the postal code..."
+            value={listingDetails.address.postalCode}
             onChange={(e) => {
               setListingDetails({
                 ...listingDetails,

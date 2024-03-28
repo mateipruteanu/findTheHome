@@ -1,7 +1,7 @@
 import { DarkModeColors, LightModeColors } from "@/colors";
 import { Button, useColorModeValue } from "@chakra-ui/react";
 
-export default function specsButton({
+export default function SpecsButton({
   icon,
   text,
 }: {

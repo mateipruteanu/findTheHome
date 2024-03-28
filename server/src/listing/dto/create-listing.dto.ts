@@ -7,6 +7,7 @@ import {
   IsOptional,
   IsPositive,
   IsString,
+  Max,
   MaxLength,
   Min,
   MinLength,
@@ -41,21 +42,25 @@ export class CreateListingDto {
 
   @IsNumber()
   @Min(1000)
+  @Max(100000000)
   @ApiProperty()
   price: number;
 
   @IsNumber()
   @Min(1)
+  @Max(100)
   @ApiProperty()
   numOfBeds: number;
 
   @IsNumber()
   @IsPositive()
+  @Max(100)
   @ApiProperty()
   numOfBaths: number;
 
   @IsNumber()
   @Min(1)
+  @Max(10000)
   @ApiProperty()
   numOfMeterSquared: number;
 

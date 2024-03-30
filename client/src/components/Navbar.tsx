@@ -41,7 +41,7 @@ export default function Navbar() {
 
   return (
     <>
-      <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
+      <Box bg={useColorModeValue("gray.100", "gray.900")} px={4} zIndex={"15"}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <Button variant="ghost" as={Link} href={"/"}>
             {colorMode === "light" ? (
@@ -63,7 +63,7 @@ export default function Navbar() {
             )}
           </Button>
 
-          <Flex alignItems={"center"}>
+          <Flex alignItems={"center"} zIndex={"15"}>
             <Stack direction={"row"} spacing={7}>
               {loading ? <p>Loading...</p> : null}
 
@@ -83,6 +83,7 @@ export default function Navbar() {
                       variant={"outline"}
                       rounded="full"
                       onClick={handleAddListingButtonClick}
+                      display={{ base: "none", md: "flex" }}
                     >
                       Add Listing
                     </Button>
@@ -118,6 +119,23 @@ export default function Navbar() {
                       </Center>
                       <br />
                       <MenuDivider />
+                      <MenuItem
+                        as={Button}
+                        onClick={handleAddListingButtonClick}
+                        display={{ base: "initial", md: "none" }}
+                        variant={"link"}
+                        leftIcon={
+                          <PlusSquareIcon
+                            color={
+                              colorMode === "light"
+                                ? LightModeColors.primary
+                                : DarkModeColors.primary
+                            }
+                          />
+                        }
+                      >
+                        Add Listing
+                      </MenuItem>
                       <MenuItem as={Link} href={Routes.SAVED_HOMES}>
                         Saved Homes
                       </MenuItem>

@@ -83,7 +83,7 @@ export default function Navbar() {
                       variant={"outline"}
                       rounded="full"
                       onClick={handleAddListingButtonClick}
-                      display={{ base: "none", md: "flex" }}
+                      display={{ base: "none", md: "initial" }}
                     >
                       Add Listing
                     </Button>

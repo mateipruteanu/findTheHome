@@ -91,7 +91,13 @@ export default function Navbar() {
                       rounded={"full"}
                       cursor={"pointer"}
                       minW={0}
-                      leftIcon={<Avatar size={"sm"} src={user?.photo} />}
+                      leftIcon={
+                        <Avatar
+                          name={user?.name}
+                          size={"sm"}
+                          src={user?.photo}
+                        />
+                      }
                       rightIcon={<ChevronDownIcon />}
                     >
                       {user?.name}
@@ -100,7 +106,11 @@ export default function Navbar() {
                     <MenuList alignItems={"center"}>
                       <br />
                       <Center>
-                        <Avatar size={"xl"} src={user?.photo} />
+                        <Avatar
+                          name={user?.name}
+                          size={"xl"}
+                          src={user?.photo}
+                        />
                       </Center>
                       <br />
                       <Center>
@@ -124,7 +134,7 @@ export default function Navbar() {
                   </Menu>
                 </Box>
               ) : (
-                <Stack direction={'row'}>
+                <Stack direction={"row"}>
                   <Button
                     as={Link}
                     href={Routes.LOGIN}

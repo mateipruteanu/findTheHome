@@ -31,10 +31,6 @@ export default function ListingOptions({ listing }: { listing: Listing }) {
   const editModal = useDisclosure();
   const cancelRef = useRef<HTMLButtonElement>(null);
 
-  const handleEditClick = () => {
-    console.log("Edit clicked for listing", listing.id);
-  };
-
   const handleDeleteClick = async () => {
     await deleteListing(listing.id);
     deleteModal.onClose();

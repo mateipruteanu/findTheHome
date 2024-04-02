@@ -17,7 +17,8 @@ export type Listing = {
     id: string;
     email: string;
     photo: string | null;
-    name: string;
+    firstName: string;
+    lastName: string;
     role: "USER" | "ADMIN";
     lastLogin: string; // @TODO: could maybe use a date
   };

@@ -2,14 +2,15 @@ import { Flex, Avatar, Box, Heading, Stack, Button } from "@chakra-ui/react";
 
 export default function ProfilePhotoAndName({
   id,
-  name,
+  firstName,
+  lastName,
   photo,
 }: {
   id: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   photo: string;
 }) {
-
   const handleChangePhotoClick = () => {
     console.log("Change photo clicked for user with id: ", id);
   };
@@ -18,11 +19,13 @@ export default function ProfilePhotoAndName({
     <Stack direction={"row"}>
       <Stack direction={"column"} justifyContent={"center"}>
         <Heading as={"h3"} size={"md"}>
-          {name}
+          {firstName + " " + lastName}
         </Heading>
-        <Button variant={"link"} onClick={handleChangePhotoClick}>change photo</Button>
+        <Button variant={"link"} onClick={handleChangePhotoClick}>
+          change photo
+        </Button>
       </Stack>
-      <Avatar name={name} src={photo} size={"lg"} />
+      <Avatar name={firstName + " " + lastName} src={photo} size={"lg"} />
     </Stack>
   );
 }

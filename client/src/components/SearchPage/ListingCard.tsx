@@ -78,7 +78,7 @@ export default function ListingCard({
                   router.push(`/user/${listing.postedBy.id}`);
                 }}
               >
-                {listing.postedBy.name}
+                {listing.postedBy.firstName + " " + listing.postedBy.lastName}
               </Button>
             </Text>
             <Heading fontSize={"2xl"} fontFamily={"body"}>

@@ -14,7 +14,8 @@ import { Routes } from "./routes";
 
 export interface AuthUser {
   id: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   photo: string;
 }
@@ -29,7 +30,8 @@ interface AuthContextProps {
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (
-    name: string,
+    firstName: string,
+    lastName: string,
     email: string,
     password: string,
     confirmPassword: string
@@ -64,7 +66,8 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
       setUser({
         id: decoded.sub,
         email: decoded.email,
-        name: decoded.name,
+        firstName: decoded.firstName,
+        lastName: decoded.lastName,
         photo: decoded.photo,
       });
 
@@ -88,7 +91,8 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
   };
 
   const register = async (
-    name: string,
+    firstName: string,
+    lastName: string,
     email: string,
     password: string,
     confirmPassword: string
@@ -99,7 +103,13 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, email, password, confirmPassword }),
+      body: JSON.stringify({
+        firstName,
+        lastName,
+        email,
+        password,
+        confirmPassword,
+      }),
     });
     const data = await response.json();
     if (response.ok) {
@@ -134,7 +144,8 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
         setUser({
           id: decoded.sub,
           email: decoded.email,
-          name: decoded.name,
+          firstName: decoded.firstName,
+          lastName: decoded.lastName,
           photo: decoded.photo,
         });
       } catch (error) {

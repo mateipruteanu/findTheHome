@@ -44,7 +44,9 @@ export default function ListingModalBody({ listing }: { listing: Listing }) {
             alignItems={"center"}
             direction={"row"}
           >
-            <Text>{listing.postedBy.name}</Text>
+            <Text>
+              {listing.postedBy.firstName + " " + listing.postedBy.lastName}
+            </Text>
             <Heading
               display={"flex"}
               size={"md"}

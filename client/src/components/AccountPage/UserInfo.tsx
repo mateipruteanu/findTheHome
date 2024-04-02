@@ -1,8 +1,5 @@
 import {
   Stack,
-  Heading,
-  Button,
-  Avatar,
   FormControl,
   FormLabel,
   Input,
@@ -38,11 +35,11 @@ export default function UserInfo({
             borderRadius={"full"}
             variant={"filled"}
             boxShadow="md"
-            placeholder={userInfo.name.split(" ")[0]}
+            placeholder={userInfo.firstName}
             onChange={(e) => {
               setUserInfo({
                 ...userInfo,
-                name: e.target.value + " " + userInfo.name.split(" ")[1],
+                firstName: e.target.value,
               });
             }}
           />
@@ -54,11 +51,11 @@ export default function UserInfo({
             borderRadius={"full"}
             variant={"filled"}
             boxShadow="md"
-            placeholder={userInfo.name.split(" ")[1]}
+            placeholder={userInfo.lastName}
             onChange={(e) => {
               setUserInfo({
                 ...userInfo,
-                name: userInfo.name.split(" ")[0] + " " + e.target.value,
+                lastName: e.target.value,
               });
             }}
           />

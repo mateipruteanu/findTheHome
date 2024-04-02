@@ -24,7 +24,7 @@ export default function UserPage({ params }: { params: { id: string } }) {
           </Center>
         ) : account ? (
           <Heading maxW="3xl" pl={"15%"} pt={"5"}>
-            The homes of {account?.name}
+            The homes of {account?.firstName + " " + account?.lastName}
           </Heading>
         ) : (
           <Center>

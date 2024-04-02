@@ -94,28 +94,28 @@ export default function Navbar() {
                       minW={0}
                       leftIcon={
                         <Avatar
-                          name={user?.name}
+                          name={user?.firstName + " " + user?.lastName}
                           size={"sm"}
                           src={user?.photo}
                         />
                       }
                       rightIcon={<ChevronDownIcon />}
                     >
-                      {user?.name}
+                      {user?.firstName + " " + user?.lastName}
                     </MenuButton>
 
                     <MenuList alignItems={"center"}>
                       <br />
                       <Center>
                         <Avatar
-                          name={user?.name}
+                          name={user?.firstName + " " + user?.lastName}
                           size={"xl"}
                           src={user?.photo}
                         />
                       </Center>
                       <br />
                       <Center>
-                        <p>Welcome, {user?.name}</p>
+                        <p>Welcome, {user?.firstName + " " + user?.lastName}</p>
                       </Center>
                       <br />
                       <MenuDivider />

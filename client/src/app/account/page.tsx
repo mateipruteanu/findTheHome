@@ -68,7 +68,8 @@ export default function Account() {
     }
 
     const updateAccountDTO: UpdateAccountDTO = {
-      name: userInfo.name,
+      firstName: userInfo.firstName,
+      lastName: userInfo.lastName,
       email: userInfo.email,
       photo: userInfo.photo,
       password: userInfo.password,
@@ -93,7 +94,8 @@ export default function Account() {
                 <Heading>My account.</Heading>
                 <ProfilePhotoAndName
                   id={user.id}
-                  name={user.name}
+                  firstName={user.firstName}
+                  lastName={user.lastName}
                   photo={user.photo}
                 />
               </Flex>
@@ -136,7 +138,8 @@ export default function Account() {
             <AlertDialogOverlay>
               <AlertDialogContent borderRadius={"xl"}>
                 <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                  Delete Account "{user.name}" forever?
+                  Delete Account "{user.firstName + " " + user.lastName}"
+                  forever?
                 </AlertDialogHeader>
 
                 <AlertDialogBody>

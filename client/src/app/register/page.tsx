@@ -35,8 +35,7 @@ export default function RegisterPage() {
   const handleRegisterButtonClick = () => {
     console.log("Register Button Clicked");
     console.log("User Details:", userDetails);
-    const name = userDetails.firstName + " " + userDetails.lastName;
-    register(name, userDetails.email, userDetails.password, userDetails.confirmPassword);
+    register(userDetails.firstName, userDetails.lastName, userDetails.email, userDetails.password, userDetails.confirmPassword);
   };
 
   return (

@@ -15,7 +15,14 @@ export class SignUpDto {
   @MaxLength(30)
   @IsNotEmpty()
   @ApiProperty()
-  name: string;
+  firstName: string;
+
+  @IsString()
+  @MinLength(3)
+  @MaxLength(30)
+  @IsNotEmpty()
+  @ApiProperty()
+  lastName: string;
 
   @IsEmail()
   @MaxLength(50)

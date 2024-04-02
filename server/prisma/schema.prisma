@@ -26,7 +26,8 @@ model User {
   id        String    @id @default(uuid())
   email     String    @unique
   photo     String?
-  name      String
+  firstName String
+  lastName  String
   password  String
   role      Role      @default(USER)
   listings  Listing[]

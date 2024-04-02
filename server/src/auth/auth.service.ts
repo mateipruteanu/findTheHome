@@ -25,7 +25,8 @@ export class AuthService {
     const payload = {
       email: user.email,
       sub: user.id,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       photo: user.photo,
     };
 
@@ -40,7 +41,8 @@ export class AuthService {
       throw new PasswordsDoNotMatchException();
     }
     const createUserDto: CreateUserDto = {
-      name: signUpDto.name,
+      firstName: signUpDto.firstName,
+      lastName: signUpDto.lastName,
       email: signUpDto.email,
       password: await bcrypt.hash(signUpDto.password, 10),
       photo: signUpDto.photo,

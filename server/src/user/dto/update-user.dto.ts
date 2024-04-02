@@ -16,7 +16,15 @@ export class UpdateUserDto {
   @IsNotEmpty()
   @IsOptional()
   @ApiPropertyOptional()
-  name?: string;
+  firstName: string;
+
+  @IsString()
+  @MinLength(3)
+  @MaxLength(30)
+  @IsNotEmpty()
+  @IsOptional()
+  @ApiPropertyOptional()
+  lastName: string;
 
   @IsEmail()
   @MaxLength(50)

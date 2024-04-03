@@ -10,6 +10,7 @@ import { ListingNotFoundException } from 'src/listing/exceptions/listing-not-fou
 import { CannotDeleteAccountException } from './exceptions/cannot-delete-account.exception';
 import { CannotUpdateAccountException } from './exceptions/cannot-update-account.exception';
 import * as bcrypt from 'bcrypt';
+import { WrongPasswordException } from './exceptions/wrong-password.exception';
 
 @Injectable()
 export class UserService {
@@ -105,6 +106,17 @@ export class UserService {
   ) {
     const isUserAdmin = await this.isUserAdmin(userId);
 
+    const user = await this.prisma.user.findUnique({
+      where: id,
+      select: {
+        password: true,
+      },
+    });
+
+    if (!(await bcrypt.compare(updateUserDto.currentPassword, user.password))) {
+      throw new WrongPasswordException();
+    }
+
     if (id.id !== userId && !isUserAdmin) {
       throw new CannotUpdateAccountException();
     }
@@ -113,10 +125,12 @@ export class UserService {
       updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
     }
 
+    const data = { ...updateUserDto, currentPassword: undefined };
+
     return this.prisma.user
       .update({
         where: id,
-        data: updateUserDto,
+        data: data,
       })
       .catch((error) => {
         if (error.code === 'P2002') {
@@ -125,7 +139,7 @@ export class UserService {
         if (error.code === 'P2025') {
           throw new UserNotFoundException();
         }
-        throw new InternalServerErrorException();
+        throw new InternalServerErrorException('Error: ' + error.code);
       })
       .then((data) => {
         return {

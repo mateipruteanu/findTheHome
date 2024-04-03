@@ -1,4 +1,4 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsEmail,
   IsNotEmpty,
@@ -32,6 +32,13 @@ export class UpdateUserDto {
   @IsOptional()
   @ApiPropertyOptional()
   email?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(8)
+  @MaxLength(50)
+  @ApiProperty()
+  currentPassword: string;
 
   @IsString()
   @IsNotEmpty()

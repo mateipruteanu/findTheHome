@@ -1,7 +1,9 @@
 "use client";
 import { AuthContext } from "@/AuthProvider";
 import Listings from "@/components/SearchPage/Listings";
+import Pagination from "@/components/SearchPage/Pagination";
 import { BACKEND_URL } from "@/constants";
+import { PaginationInfo } from "@/hooks/useGetListings";
 import { Center, Container, Heading, Text } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 
@@ -10,15 +12,21 @@ export default function MyHomesPage() {
   const { user, loading } = useContext(AuthContext);
   const [page, setPage] = useState(1);
   const [loadingListings, setLoadingListings] = useState(false);
+  const [paginationInfo, setPaginationInfo] = useState<PaginationInfo>(
+    {} as PaginationInfo
+  );
 
   useEffect(() => {
     setLoadingListings(true);
     if (!user) return;
     fetch(`${BACKEND_URL}/listing?page=${page}&posterId=${user?.id}`)
       .then((response) => response.json())
-      .then((data) => setListings(data.listings));
+      .then((data) => {
+        setListings(data.listings);
+        setPaginationInfo(data.pagination);
+      });
     setLoadingListings(false);
-  }, [user]);
+  }, [user, page]);
 
   return (
     <>
@@ -36,12 +44,23 @@ export default function MyHomesPage() {
             <Heading as={"h2"}>Loading...</Heading>
           </Center>
         ) : listings ? (
-          <Listings listings={listings} type={"my-homes"} />
+          <Listings
+            listings={listings}
+            type={"my-homes"}
+            paginationInfo={paginationInfo}
+          />
         ) : (
           <Center>
             <Heading as={"h2"}>No listings found.</Heading>
           </Center>
         )}
+        {paginationInfo.total_pages ? (
+          <Pagination
+            page={page}
+            setPage={setPage}
+            totalPages={paginationInfo.total_pages}
+          />
+        ) : null}
       </Container>
     </>
   );

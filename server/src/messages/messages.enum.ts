@@ -3,6 +3,7 @@ export enum Messages {
   UserUpdated = 'User updated successfully',
   UserDeleted = 'User deleted successfully',
   UserFound = 'User found',
+  UserSavedListingsFound = 'Listings saved by user found',
 
   AddressUpdated = 'Address updated successfully',
   AddressDeleted = 'Address deleted successfully',
@@ -12,6 +13,8 @@ export enum Messages {
   ListingUpdated = 'Listing updated successfully',
   ListingDeleted = 'Listing deleted successfully',
   ListingFound = 'Listing found',
+  ListingSaved = 'Listing saved successfully',
+  ListingUnsaved = 'Listing unsaved successfully',
 
   LoggedIn = 'Logged in successfully',
 }

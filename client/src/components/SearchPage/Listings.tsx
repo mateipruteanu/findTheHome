@@ -2,6 +2,8 @@ import { Listing } from "@/entities/Listing";
 import ListingCard from "./ListingCard";
 import { Box, Center, Heading, Text } from "@chakra-ui/react";
 import { PaginationInfo } from "@/hooks/useGetListings";
+import { AuthContext, AuthUser } from "@/AuthProvider";
+import { useContext } from "react";
 
 export default function Listings({
   listings,
@@ -12,6 +14,8 @@ export default function Listings({
   paginationInfo: PaginationInfo;
   type?: "my-homes";
 }) {
+  const { user } = useContext(AuthContext);
+
   return (
     <Box>
       <Center>
@@ -21,7 +25,11 @@ export default function Listings({
         <Box>
           {listings.map((listing) => (
             <Box key={listing.id}>
-              <ListingCard listing={listing} type={type} />
+              <ListingCard
+                listing={listing}
+                type={type}
+                user={user as AuthUser}
+              />
             </Box>
           ))}
         </Box>

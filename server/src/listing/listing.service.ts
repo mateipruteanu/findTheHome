@@ -10,6 +10,7 @@ import { UserCantDeleteListingException } from 'src/user/exceptions/user-cant-de
 import Fuse from 'fuse.js';
 import { PageNumberTooHighException } from './exceptions/page-number-high.exception';
 import { PageNumberTooLowException } from './exceptions/page-number-low.exception';
+import { Messages } from 'src/messages/messages.enum';
 
 @Injectable()
 export class ListingService {
@@ -53,6 +54,7 @@ export class ListingService {
       city,
       priceLowerThan,
       posterId,
+      savedBy,
     } = queryParams;
 
     if (page && parseInt(page) < 1) {
@@ -82,6 +84,13 @@ export class ListingService {
     if (posterId) {
       where['posterId'] = posterId;
     }
+    if (savedBy) {
+      where['savedBy'] = {
+        some: {
+          id: savedBy,
+        },
+      };
+    }
 
     const totalListings = await this.prisma.listing.count({ where });
     const take = 5;
@@ -105,7 +114,13 @@ export class ListingService {
 
     return this.prisma.listing
       .findMany({
-        include: { address: true, postedBy: true },
+        include: {
+          address: true,
+          postedBy: true,
+          savedBy: {
+            select: { id: true },
+          },
+        },
         where,
         skip,
         take,
@@ -122,6 +137,7 @@ export class ListingService {
               ...listing.postedBy,
               password: undefined,
             },
+            numberOfSaves: listing.savedBy.length,
           };
         });
         return {
@@ -229,5 +245,55 @@ export class ListingService {
     const result = fuse.search(city);
 
     return result[0]?.item.city;
+  }
+
+  async saveListing(userId: string, listingId: string) {
+    return this.prisma.user
+      .update({
+        where: {
+          id: userId,
+        },
+        data: {
+          savedListings: {
+            connect: {
+              id: listingId,
+            },
+          },
+        },
+      })
+      .catch((error) => {
+        if (error.code === 'P2025') {
+          throw new ListingNotFoundException();
+        }
+        throw new InternalServerErrorException();
+      })
+      .then(() => {
+        return Messages.ListingSaved;
+      });
+  }
+
+  async unsaveListing(userId: string, listingId: string) {
+    return this.prisma.user
+      .update({
+        where: {
+          id: userId,
+        },
+        data: {
+          savedListings: {
+            disconnect: {
+              id: listingId,
+            },
+          },
+        },
+      })
+      .catch((error) => {
+        if (error.code === 'P2025') {
+          throw new ListingNotFoundException();
+        }
+        throw new InternalServerErrorException();
+      })
+      .then(() => {
+        return Messages.ListingUnsaved;
+      });
   }
 }

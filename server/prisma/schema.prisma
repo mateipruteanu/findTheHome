@@ -23,15 +23,16 @@ enum ListingType {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  email     String    @unique
-  photo     String?
-  firstName String
-  lastName  String
-  password  String
-  role      Role      @default(USER)
-  listings  Listing[]
-  lastLogin DateTime  @default(now())
+  id            String    @id @default(uuid())
+  email         String    @unique
+  photo         String?
+  firstName     String
+  lastName      String
+  password      String
+  role          Role      @default(USER)
+  listings      Listing[] @relation("listingsPostedBy")
+  savedListings Listing[] @relation("SavedListings")
+  lastLogin     DateTime  @default(now())
 }
 
 model Listing {
@@ -45,11 +46,12 @@ model Listing {
   numOfBeds         Int
   numOfBaths        Int
   numOfMeterSquared Int
-  homeType          HomeType   @default(HOUSE)
+  homeType          HomeType    @default(HOUSE)
   listingType       ListingType @default(SALE)
   postedAt          DateTime    @default(now())
-  postedBy          User        @relation(fields: [posterId], references: [id], onDelete: Cascade) // the user that posted the listing
+  postedBy          User        @relation(fields: [posterId], references: [id], onDelete: Cascade, name: "listingsPostedBy") // the user that posted the listing
   posterId          String
+  savedBy           User[]      @relation("SavedListings")
 }
 
 model Address {

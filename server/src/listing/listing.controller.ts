@@ -113,4 +113,42 @@ export class ListingController {
     const userId = req.user.sub;
     return this.listingService.remove({ id }, userId);
   }
+
+  @Post(':id/save')
+  @UseGuards(AuthGuard)
+  @ApiResponse({ status: HttpStatus.OK, description: Messages.ListingSaved })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: ErrorMessages.BadRequest,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: ErrorMessages.ListingNotFound,
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: ErrorMessages.InternalServerError,
+  })
+  saveListing(@Request() req, @Param('id') id: string) {
+    return this.listingService.saveListing(req.user.sub, id);
+  }
+
+  @Delete(':id/save')
+  @UseGuards(AuthGuard)
+  @ApiResponse({ status: HttpStatus.OK, description: Messages.ListingUnsaved })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: ErrorMessages.BadRequest,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: ErrorMessages.ListingNotFound,
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: ErrorMessages.InternalServerError,
+  })
+  unsaveListing(@Request() req, @Param('id') id: string) {
+    return this.listingService.unsaveListing(req.user.sub, id);
+  }
 }

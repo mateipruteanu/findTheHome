@@ -1,7 +1,6 @@
 "use client";
 import { LightModeColors } from "@/colors";
 import ProfilePhotoAndName from "@/components/AccountPage/ProfilePhotoAndName";
-import UserInfo from "@/components/AccountPage/UserInfo";
 import useAccount from "@/hooks/useAccount";
 import {
   AlertDialog,

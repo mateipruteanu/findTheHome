@@ -18,23 +18,46 @@ import {
 import {
   IconBathFilled,
   IconBedFilled,
-  IconBookmark,
+
   IconRuler2,
 } from "@tabler/icons-react";
 import SpecsButton from "./SpecsButton";
 import ListingOptions from "../ListingOptions";
 import { useRouter } from "next/navigation";
 import ListingModal from "../ListingModal";
+import { AuthUser } from "@/AuthProvider";
+import useSaveListing from "@/hooks/useSaveListing";
+import SaveButton from "./SaveButton";
+import { useState } from "react";
 
 export default function ListingCard({
   listing,
   type,
+  user,
 }: {
   listing: Listing;
   type?: "my-homes";
+  user: AuthUser;
 }) {
   const router = useRouter();
   const cardModal = useDisclosure();
+  const { saveListing, unsaveListing } = useSaveListing();
+
+  const [isListingSaved, setIsListingSaved] = useState(
+    listing.savedBy.find((savedByUser) => savedByUser.id === user.id)
+      ? true
+      : false
+  );
+
+  const handleSaveListingButtonClick = () => {
+    if (isListingSaved) {
+      unsaveListing(listing);
+      setIsListingSaved(false);
+    } else {
+      saveListing(listing);
+      setIsListingSaved(true);
+    }
+  };
 
   return (
     <Box>
@@ -172,13 +195,9 @@ export default function ListingCard({
                     bgColor: LightModeColors.background,
                   }}
                   boxShadow="md"
+                  onClick={handleSaveListingButtonClick}
                 >
-                  <IconBookmark
-                    color={useColorModeValue(
-                      LightModeColors.text,
-                      DarkModeColors.text
-                    )}
-                  />
+                  <SaveButton isListingSaved={isListingSaved} />
                 </Button>
               )}
             </Flex>

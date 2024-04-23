@@ -6,7 +6,7 @@ export type Listing = {
   description: string;
   image: string;
   price: number;
-  estimatedPrice? : number | null;
+  estimatedPrice?: number | null;
   numOfBeds: number;
   numOfBaths: number;
   numOfMeterSquared: number;
@@ -24,4 +24,7 @@ export type Listing = {
   };
   postedAt: string; // @TODO: could maybe use a date
   posterId: string;
+  savedBy: {
+    id: string;
+  }[];
 };

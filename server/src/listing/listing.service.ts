@@ -46,51 +46,13 @@ export class ListingService {
   }
 
   async getAll(queryParams: any) {
-    const {
-      page,
-      orderBy,
-      homeType,
-      listingType,
-      city,
-      priceLowerThan,
-      posterId,
-      savedBy,
-    } = queryParams;
+    const { page, orderBy } = queryParams;
 
     if (page && parseInt(page) < 1) {
       throw new PageNumberTooLowException(page);
     }
 
-    const where = {};
-    if (homeType) {
-      where['homeType'] = homeType.toUpperCase();
-    }
-    if (listingType) {
-      where['listingType'] = listingType.toUpperCase();
-    }
-    if (city) {
-      const bestMatch = await this.fuzzySearchCity(city);
-      if (bestMatch) {
-        where['address'] = {
-          city: bestMatch,
-        };
-      }
-    }
-    if (priceLowerThan) {
-      where['price'] = {
-        lte: parseInt(priceLowerThan),
-      };
-    }
-    if (posterId) {
-      where['posterId'] = posterId;
-    }
-    if (savedBy) {
-      where['savedBy'] = {
-        some: {
-          id: savedBy,
-        },
-      };
-    }
+    const where = await this.addToWhereQuery(queryParams);
 
     const totalListings = await this.prisma.listing.count({ where });
     const take = 5;
@@ -295,5 +257,104 @@ export class ListingService {
       .then(() => {
         return Messages.ListingUnsaved;
       });
+  }
+
+  async addToWhereQuery(queryParams) {
+    const {
+      homeType,
+      listingType,
+      city,
+      priceLowerThan,
+      priceHigherThan,
+      numOfBedsLowerThan,
+      numOfBedsHigherThan,
+      numOfBathsLowerThan,
+      numOfBathsHigherThan,
+      numOfMetersSquaredLowerThan,
+      numOfMetersSquaredHigherThan,
+      postalCode,
+      posterId,
+      savedBy,
+    } = queryParams;
+
+    const where = {};
+    if (homeType) {
+      where['homeType'] = homeType.toUpperCase();
+    }
+    if (listingType) {
+      where['listingType'] = listingType.toUpperCase();
+    }
+    if (city) {
+      const bestMatch = await this.fuzzySearchCity(city);
+      if (bestMatch) {
+        where['address'] = {
+          city: bestMatch,
+        };
+      }
+    }
+    if (priceLowerThan) {
+      where['price'] = {
+        lte: parseInt(priceLowerThan),
+      };
+    }
+    if (priceHigherThan) {
+      where['price'] = {
+        gte: parseInt(priceHigherThan),
+      };
+    }
+    if (posterId) {
+      where['posterId'] = posterId;
+    }
+    if (savedBy) {
+      where['savedBy'] = {
+        some: {
+          id: savedBy,
+        },
+      };
+    }
+
+    if (numOfBedsLowerThan) {
+      where['numOfBeds'] = {
+        lte: parseInt(numOfBedsLowerThan),
+      };
+    }
+
+    if (numOfBedsHigherThan) {
+      where['numOfBeds'] = {
+        gte: parseInt(numOfBedsHigherThan),
+      };
+    }
+
+    if (numOfBathsLowerThan) {
+      where['numOfBaths'] = {
+        lte: parseInt(numOfBathsLowerThan),
+      };
+    }
+
+    if (numOfBathsHigherThan) {
+      where['numOfBaths'] = {
+        gte: parseInt(numOfBathsHigherThan),
+      };
+    }
+
+    if (numOfMetersSquaredLowerThan) {
+      where['numOfMetersSquared'] = {
+        lte: parseInt(numOfMetersSquaredLowerThan),
+      };
+    }
+
+    if (numOfMetersSquaredHigherThan) {
+      where['numOfMetersSquared'] = {
+        gte: parseInt(numOfMetersSquaredHigherThan),
+      };
+    }
+
+    if (postalCode) {
+      where['address'] = {
+        postalCode: postalCode,
+      };
+    }
+
+    return where;
   }
 }

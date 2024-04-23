@@ -2,6 +2,7 @@
 import { DarkModeColors, LightModeColors } from "@/colors";
 import { SearchIcon, ChevronDownIcon, SettingsIcon } from "@chakra-ui/icons";
 import {
+  Box,
   Button,
   Flex,
   Input,
@@ -13,11 +14,13 @@ import {
   MenuList,
   useBreakpointValue,
   useColorModeValue,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { IconAdjustmentsHorizontal } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { URLSearchParams as SearchParams } from "url";
+import FiltersModal from "./FiltersModal";
 
 export default function SearchBar({
   searchParams,
@@ -25,6 +28,7 @@ export default function SearchBar({
   searchParams: SearchParams;
 }) {
   const router = useRouter();
+  const filtersModal = useDisclosure();
   const [propertyType, setPropertyType] = useState(() => {
     if (searchParams.get("homeType") === "apartment") {
       return "Apartment";
@@ -96,64 +100,154 @@ export default function SearchBar({
     router.push(`/search?${searchQuery.toString()}`);
   };
 
-  const handleFiltersButtonClick = () => {
-    console.log("Filters button clicked");
-  };
-
   return (
-    <Flex direction="column" alignItems="center" justifyContent="center" pt={4}>
+    <Box>
       <Flex
-        direction={{ base: "column", md: "row" }}
-        wrap="wrap"
-        justifyContent="center"
+        direction="column"
         alignItems="center"
-        w="full"
+        justifyContent="center"
+        pt={4}
       >
-        <InputGroup
-          maxWidth={searchInputWidth}
-          flexGrow={1}
-          mr={2}
-          h="40px"
-          mb={{ base: 2, md: 0 }}
-          zIndex={"10"}
+        <Flex
+          direction={{ base: "column", md: "row" }}
+          wrap="wrap"
+          justifyContent="center"
+          alignItems="center"
+          w="full"
         >
-          <InputLeftElement pointerEvents="none" h="40px">
-            <SearchIcon color="gray.300" />
-          </InputLeftElement>
-          <Input
-            type="text"
-            placeholder="Enter the city..."
-            roundedLeft="full"
-            borderRightRadius={0}
-            variant="outline"
-            backgroundColor={searchBackground}
+          <InputGroup
+            maxWidth={searchInputWidth}
+            flexGrow={1}
+            mr={2}
             h="40px"
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-          />
-          <Menu>
-            <MenuButton
-              as={Button}
+            mb={{ base: 2, md: 0 }}
+            zIndex={"10"}
+          >
+            <InputLeftElement pointerEvents="none" h="40px">
+              <SearchIcon color="gray.300" />
+            </InputLeftElement>
+            <Input
+              type="text"
+              placeholder="Enter the city..."
+              roundedLeft="full"
+              borderRightRadius={0}
               variant="outline"
-              borderLeftRadius={0}
-              borderRightRadius={"full"}
-              rightIcon={<ChevronDownIcon />}
-              minWidth={dropdownWidth}
               backgroundColor={searchBackground}
               h="40px"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+            />
+            <Menu>
+              <MenuButton
+                as={Button}
+                variant="outline"
+                borderLeftRadius={0}
+                borderRightRadius={"full"}
+                rightIcon={<ChevronDownIcon />}
+                minWidth={dropdownWidth}
+                backgroundColor={searchBackground}
+                h="40px"
+              >
+                {propertyType}
+              </MenuButton>
+              <MenuList>
+                <MenuItem h="40px" onClick={() => setPropertyType("Apartment")}>
+                  Apartment
+                </MenuItem>
+                <MenuItem h="40px" onClick={() => setPropertyType("House")}>
+                  House
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </InputGroup>
+          <Button
+            leftIcon={<IconAdjustmentsHorizontal />}
+            bg={"transparent"}
+            border="1px"
+            borderColor={LightModeColors.softGray}
+            rounded="full"
+            boxShadow="md"
+            minWidth={searchButtonWidth}
+            aria-label="Search"
+            ml={2}
+            h="40px"
+            onClick={filtersModal.onOpen}
+            display={{ base: "none", md: "flex" }}
+          >
+            Filters
+          </Button>
+          <Button
+            leftIcon={<SearchIcon />}
+            bg={LightModeColors.secondary}
+            rounded="full"
+            boxShadow="md"
+            minWidth={searchButtonWidth}
+            aria-label="Search"
+            ml={2}
+            h="40px"
+            onClick={handleSearchButtonClick}
+            display={{ base: "none", md: "flex" }}
+          >
+            Search
+          </Button>
+        </Flex>
+
+        <Flex
+          wrap="wrap"
+          justifyContent="start"
+          alignItems="center"
+          w="full"
+          maxW={"3xl"}
+          pl={{ base: 0, md: 5 }}
+        >
+          <Flex
+            position="relative"
+            h="36px"
+            alignItems="center"
+            w={{ base: "100%" }}
+          >
+            <Button
+              bgColor={
+                activeButton === "For Sale"
+                  ? LightModeColors.primary
+                  : LightModeColors.background
+              }
+              color={
+                activeButton === "For Sale"
+                  ? LightModeColors.background
+                  : LightModeColors.primary
+              }
+              variant={activeButton === "For Sale" ? "solid" : "outline"}
+              onClick={() => handleListingTypeToggle("For Sale")}
+              roundedLeft={"full"}
+              roundedRight={0}
+              h={"26px"}
+              w={{ base: "50%", md: "120px" }}
             >
-              {propertyType}
-            </MenuButton>
-            <MenuList>
-              <MenuItem h="40px" onClick={() => setPropertyType("Apartment")}>
-                Apartment
-              </MenuItem>
-              <MenuItem h="40px" onClick={() => setPropertyType("House")}>
-                House
-              </MenuItem>
-            </MenuList>
-          </Menu>
-        </InputGroup>
+              For Sale
+            </Button>
+            <Button
+              bgColor={
+                activeButton === "For Rent"
+                  ? LightModeColors.primary
+                  : LightModeColors.background
+              }
+              color={
+                activeButton === "For Rent"
+                  ? LightModeColors.background
+                  : LightModeColors.primary
+              }
+              variant={activeButton === "For Rent" ? "solid" : "outline"}
+              onClick={() => handleListingTypeToggle("For Rent")}
+              roundedRight={"full"}
+              roundedLeft={0}
+              h={"26px"}
+              w={{ base: "50%", md: "120px" }}
+            >
+              For Rent
+            </Button>
+          </Flex>
+        </Flex>
         <Button
           leftIcon={<IconAdjustmentsHorizontal />}
           bg={"transparent"}
@@ -161,12 +255,12 @@ export default function SearchBar({
           borderColor={LightModeColors.softGray}
           rounded="full"
           boxShadow="md"
-          minWidth={searchButtonWidth}
+          width={"100%"}
+          my={2}
           aria-label="Search"
-          ml={2}
           h="40px"
-          onClick={handleFiltersButtonClick}
-          display={{ base: "none", md: "flex" }}
+          onClick={filtersModal.onOpen}
+          display={{ base: "flex", md: "none" }}
         >
           Filters
         </Button>
@@ -175,102 +269,26 @@ export default function SearchBar({
           bg={LightModeColors.secondary}
           rounded="full"
           boxShadow="md"
-          minWidth={searchButtonWidth}
+          width={"100%"}
           aria-label="Search"
-          ml={2}
           h="40px"
           onClick={handleSearchButtonClick}
-          display={{ base: "none", md: "flex" }}
+          display={{ base: "block", md: "none" }}
         >
           Search
         </Button>
       </Flex>
-
-      <Flex
-        wrap="wrap"
-        justifyContent="start"
-        alignItems="center"
-        w="full"
-        maxW={"3xl"}
-        pl={{ base: 0, md: 5 }}
-      >
-        <Flex
-          position="relative"
-          h="36px"
-          alignItems="center"
-          w={{ base: "100%" }}
-        >
-          <Button
-            bgColor={
-              activeButton === "For Sale"
-                ? LightModeColors.primary
-                : LightModeColors.background
-            }
-            color={
-              activeButton === "For Sale"
-                ? LightModeColors.background
-                : LightModeColors.primary
-            }
-            variant={activeButton === "For Sale" ? "solid" : "outline"}
-            onClick={() => handleListingTypeToggle("For Sale")}
-            roundedLeft={"full"}
-            roundedRight={0}
-            h={"26px"}
-            w={{ base: "50%", md: "120px" }}
-          >
-            For Sale
-          </Button>
-          <Button
-            bgColor={
-              activeButton === "For Rent"
-                ? LightModeColors.primary
-                : LightModeColors.background
-            }
-            color={
-              activeButton === "For Rent"
-                ? LightModeColors.background
-                : LightModeColors.primary
-            }
-            variant={activeButton === "For Rent" ? "solid" : "outline"}
-            onClick={() => handleListingTypeToggle("For Rent")}
-            roundedRight={"full"}
-            roundedLeft={0}
-            h={"26px"}
-            w={{ base: "50%", md: "120px" }}
-          >
-            For Rent
-          </Button>
-        </Flex>
-      </Flex>
-      <Button
-        leftIcon={<IconAdjustmentsHorizontal />}
-        bg={"transparent"}
-        border="1px"
-        borderColor={LightModeColors.softGray}
-        rounded="full"
-        boxShadow="md"
-        width={"100%"}
-        my={2}
-        aria-label="Search"
-        h="40px"
-        onClick={handleFiltersButtonClick}
-        display={{ base: "flex", md: "none" }}
-      >
-        Filters
-      </Button>
-      <Button
-        leftIcon={<SearchIcon />}
-        bg={LightModeColors.secondary}
-        rounded="full"
-        boxShadow="md"
-        width={"100%"}
-        aria-label="Search"
-        h="40px"
-        onClick={handleSearchButtonClick}
-        display={{ base: "block", md: "none" }}
-      >
-        Search
-      </Button>
-    </Flex>
+      <FiltersModal
+        isOpen={filtersModal.isOpen}
+        onClose={filtersModal.onClose}
+        homeType={propertyType.toLowerCase() as "apartment" | "house"}
+        listingType={
+          activeButton.toLowerCase().trim().includes("for sale")
+            ? "sale"
+            : "rent"
+        }
+        city={searchInput.trim()}
+      />
+    </Box>
   );
 }

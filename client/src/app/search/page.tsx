@@ -20,13 +20,56 @@ export default function SearchPage() {
   useEffect(() => {
     setLoadingListings(true);
 
-    const homeType = searchParams.get("homeType") || "apartment";
-    const listingType = searchParams.get("listingType") || "sale";
-    const city = searchParams.get("city") || "";
-
-    fetch(
-      `${BACKEND_URL}/listing?page=${page}&homeType=${homeType}&listingType=${listingType}&city=${city}`
+    const homeType = searchParams.get("homeType")
+      ? `&homeType=${searchParams.get("homeType")}`
+      : "";
+    const listingType = searchParams.get("listingType")
+      ? `&listingType=${searchParams.get("listingType")}`
+      : "";
+    const city = searchParams.get("city")
+      ? `&city=${searchParams.get("city")}`
+      : "";
+    const priceLowerThan = searchParams.get("priceLowerThan")
+      ? `&priceLowerThan=${searchParams.get("priceLowerThan")}`
+      : "";
+    const priceHigherThan = searchParams.get("priceHigherThan")
+      ? `&priceHigherThan=${searchParams.get("priceHigherThan")}`
+      : "";
+    const numOfBedsLowerThan = searchParams.get("numOfBedsLowerThan")
+      ? `&numOfBedsLowerThan=${searchParams.get("numOfBedsLowerThan")}`
+      : "";
+    const numOfBedsHigherThan = searchParams.get("numOfBedsHigherThan")
+      ? `&numOfBedsHigherThan=${searchParams.get("numOfBedsHigherThan")}`
+      : "";
+    const numOfBathsLowerThan = searchParams.get("numOfBathsLowerThan")
+      ? `&numOfBathsLowerThan=${searchParams.get("numOfBathsLowerThan")}`
+      : "";
+    const numOfBathsHigherThan = searchParams.get("numOfBathsHigherThan")
+      ? `&numOfBathsHigherThan=${searchParams.get("numOfBathsHigherThan")}`
+      : "";
+    const numOfMetersSquaredLowerThan = searchParams.get(
+      "numOfMetersSquaredLowerThan"
     )
+      ? `&numOfMetersSquaredLowerThan=${searchParams.get(
+          "numOfMetersSquaredLowerThan"
+        )}`
+      : "";
+    const numOfMetersSquaredHigherThan = searchParams.get(
+      "numOfMetersSquaredHigherThan"
+    )
+      ? `&numOfMetersSquaredHigherThan=${searchParams.get(
+          "numOfMetersSquaredHigherThan"
+        )}`
+      : "";
+    const postalCode = searchParams.get("postalCode")
+      ? `&postalCode=${searchParams.get("postalCode")}`
+      : "";
+
+    const URL = `${BACKEND_URL}/listing?page=${page}${homeType}${listingType}${city}${priceLowerThan}${priceHigherThan}${numOfBedsLowerThan}${numOfBedsHigherThan}${numOfBathsLowerThan}${numOfBathsHigherThan}${numOfMetersSquaredLowerThan}${numOfMetersSquaredHigherThan}${postalCode}`;
+
+    console.log(URL);
+
+    fetch(URL)
       .then((response) => response.json())
       .then((data) => {
         setListings(data.listings);

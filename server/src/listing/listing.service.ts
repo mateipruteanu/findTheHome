@@ -84,10 +84,10 @@ export class ListingService {
     }
 
     const totalListings = await this.prisma.listing.count({ where });
-    const take = 10;
+    const take = 5;
     const total_pages = Math.ceil(totalListings / take);
 
-    if (page && parseInt(page) > total_pages) {
+    if (page && parseInt(page) > total_pages && total_pages !== 0) {
       throw new PageNumberTooHighException(page, total_pages);
     }
     const skip = page ? (parseInt(page) - 1) * take : undefined;

@@ -52,7 +52,9 @@ export default function useAccount() {
       const data = await response.json();
       if (response.ok) {
         console.log("[useAccount] Account updated successfully:", data);
-        toast.success("Account updated successfully");
+        toast.success(
+          "Account updated successfully. Log in again to continue."
+        );
         return data;
       } else if (response.status === 403) {
         console.error("[useAccount] Failed to update account:", data.message);
@@ -109,5 +111,12 @@ export default function useAccount() {
     }
   };
 
-  return { isLoading, error, getAccount, updateAccount, deleteAccount, account };
+  return {
+    isLoading,
+    error,
+    getAccount,
+    updateAccount,
+    deleteAccount,
+    account,
+  };
 }

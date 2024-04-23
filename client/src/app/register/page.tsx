@@ -1,8 +1,6 @@
 "use client";
 import { AuthContext } from "@/AuthProvider";
 import { LightModeColors } from "@/colors";
-import Listings from "@/components/SearchPage/Listings";
-import SearchBar from "@/components/SearchPage/SearchBar";
 import { Routes } from "@/routes";
 import {
   Button,
@@ -35,7 +33,13 @@ export default function RegisterPage() {
   const handleRegisterButtonClick = () => {
     console.log("Register Button Clicked");
     console.log("User Details:", userDetails);
-    register(userDetails.firstName, userDetails.lastName, userDetails.email, userDetails.password, userDetails.confirmPassword);
+    register(
+      userDetails.firstName,
+      userDetails.lastName,
+      userDetails.email,
+      userDetails.password,
+      userDetails.confirmPassword
+    );
   };
 
   return (

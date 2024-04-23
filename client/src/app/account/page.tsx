@@ -16,14 +16,19 @@ import {
   Container,
   Divider,
   Flex,
+  FormControl,
+  FormLabel,
   Heading,
+  Input,
+  Stack,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { AuthContext, AuthUser } from "@/AuthProvider";
+import React, { useContext, useRef, useState } from "react";
+import { AuthContext } from "@/AuthProvider";
 import { UpdateAccountDTO } from "@/dtos/UpdateAccountDTO";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import removeEmptyProperties from "@/utils/removeEmptyProperties";
 
 export default function Account() {
   const router = useRouter();
@@ -33,18 +38,21 @@ export default function Account() {
   const { user, logout } = useContext(AuthContext);
 
   const [userInfo, setUserInfo] = useState({
-    ...user,
-    password: undefined,
-    confirmPassword: undefined,
+    firstName: "",
+    lastName: "",
+    email: "",
+    currentPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
   });
 
-  useEffect(() => {
-    setUserInfo({ ...user, password: undefined, confirmPassword: undefined });
-    console.log("User info updated:", userInfo);
-  }, [user]);
-
   const handleDeleteClick = () => {
-    const data = deleteAccount((userInfo as AuthUser).id);
+    if (!user) {
+      toast.error("User not found");
+      return;
+    }
+
+    const data = deleteAccount(user.id);
 
     if (!data) {
       return;
@@ -58,29 +66,43 @@ export default function Account() {
   };
 
   const onSaveButtonClick = async () => {
-    if (!userInfo) {
+    const cleanedUserInfo = removeEmptyProperties(userInfo);
+    if (!cleanedUserInfo) {
       toast.error("Could not save changes - user info is missing.");
       return;
     }
-    if (userInfo.password !== userInfo.confirmPassword) {
-      toast.error(`Passwords do not match.`);
+
+    if (!cleanedUserInfo.currentPassword) {
+      toast.error("Enter your current password to save changes.");
+      return;
+    }
+
+    if (
+      cleanedUserInfo.newPassword &&
+      cleanedUserInfo.newPassword !== cleanedUserInfo.confirmNewPassword
+    ) {
+      toast.error("Passwords do not match.");
+      console.log("New Password: ", cleanedUserInfo.newPassword);
+      console.log("Confirm Password: ", cleanedUserInfo.confirmPassword);
       return;
     }
 
     const updateAccountDTO: UpdateAccountDTO = {
-      firstName: userInfo.firstName,
-      lastName: userInfo.lastName,
-      email: userInfo.email,
-      photo: userInfo.photo,
-      password: userInfo.password,
+      firstName: cleanedUserInfo.firstName,
+      lastName: cleanedUserInfo.lastName,
+      email: cleanedUserInfo.email,
+      currentPassword: cleanedUserInfo.currentPassword,
+      password: cleanedUserInfo.newPassword,
     };
-    console.log("Updating user with this", updateAccountDTO);
-    const data = await updateAccount(
-      (userInfo as AuthUser).id,
-      userInfo as UpdateAccountDTO
-    );
+
+    if (!user) {
+      toast.error("User not found");
+      return;
+    }
+
+    const data = await updateAccount(user.id, updateAccountDTO);
     if (data) {
-      router.refresh();
+      logout();
     }
   };
 
@@ -100,7 +122,111 @@ export default function Account() {
                 />
               </Flex>
               <Divider pt={5} />
-              <UserInfo userInfo={user} setUserInfo={setUserInfo} />
+
+              <Stack direction={"column"}>
+                <Stack direction={"row"} justifyContent={"center"}>
+                  <FormControl id="first-name">
+                    <FormLabel>First Name</FormLabel>
+                    <Input
+                      type="text"
+                      borderRadius={"full"}
+                      variant={"filled"}
+                      boxShadow="md"
+                      placeholder={user.firstName}
+                      onChange={(e) => {
+                        setUserInfo({
+                          ...userInfo,
+                          firstName: e.target.value,
+                        });
+                      }}
+                    />
+                  </FormControl>
+                  <FormControl id="last-name">
+                    <FormLabel>Last Name</FormLabel>
+                    <Input
+                      type="text"
+                      borderRadius={"full"}
+                      variant={"filled"}
+                      boxShadow="md"
+                      placeholder={user.lastName}
+                      onChange={(e) => {
+                        setUserInfo({
+                          ...userInfo,
+                          lastName: e.target.value,
+                        });
+                      }}
+                    />
+                  </FormControl>
+                </Stack>
+                <Divider pt={5} />
+                <Stack direction={"column"} justifyContent={"center"}>
+                  <FormControl id="email">
+                    <FormLabel>Email Address</FormLabel>
+                    <Input
+                      type="email"
+                      borderRadius={"full"}
+                      variant={"filled"}
+                      boxShadow="md"
+                      placeholder={user.email}
+                      onChange={(e) => {
+                        setUserInfo({
+                          ...userInfo,
+                          email: e.target.value,
+                        });
+                      }}
+                    />
+                  </FormControl>
+                  <FormControl id="password">
+                    <FormLabel>New Password</FormLabel>
+                    <Input
+                      type="password"
+                      borderRadius={"full"}
+                      variant={"filled"}
+                      boxShadow="md"
+                      placeholder="*********"
+                      onChange={(e) => {
+                        setUserInfo({
+                          ...userInfo,
+                          newPassword: e.target.value,
+                        });
+                      }}
+                    />
+                  </FormControl>
+                  <FormControl id="confirm-password">
+                    <FormLabel>Confirm New Password</FormLabel>
+                    <Input
+                      type="password"
+                      borderRadius={"full"}
+                      variant={"filled"}
+                      boxShadow="md"
+                      placeholder="*********"
+                      onChange={(e) => {
+                        setUserInfo({
+                          ...userInfo,
+                          confirmNewPassword: e.target.value,
+                        });
+                      }}
+                    />
+                  </FormControl>
+                  <FormControl id="current-password">
+                    <FormLabel>Current Password</FormLabel>
+                    <Input
+                      type="password"
+                      borderRadius={"full"}
+                      variant={"filled"}
+                      boxShadow="md"
+                      placeholder="*********"
+                      onChange={(e) => {
+                        setUserInfo({
+                          ...userInfo,
+                          currentPassword: e.target.value,
+                        });
+                      }}
+                    />
+                  </FormControl>
+                </Stack>
+              </Stack>
+
               <Flex justifyContent={"space-between"} pt={10}>
                 <Button
                   variant={"ghost"}

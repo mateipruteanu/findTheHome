@@ -299,6 +299,7 @@ export class ListingService {
     }
     if (priceHigherThan) {
       where['price'] = {
+        ...where['price'],
         gte: parseInt(priceHigherThan),
       };
     }
@@ -321,6 +322,7 @@ export class ListingService {
 
     if (numOfBedsHigherThan) {
       where['numOfBeds'] = {
+        ...where['numOfBeds'],
         gte: parseInt(numOfBedsHigherThan),
       };
     }
@@ -333,18 +335,20 @@ export class ListingService {
 
     if (numOfBathsHigherThan) {
       where['numOfBaths'] = {
+        ...where['numOfBaths'],
         gte: parseInt(numOfBathsHigherThan),
       };
     }
 
     if (numOfMetersSquaredLowerThan) {
-      where['numOfMetersSquared'] = {
+      where['numOfMeterSquared'] = {
         lte: parseInt(numOfMetersSquaredLowerThan),
       };
     }
 
     if (numOfMetersSquaredHigherThan) {
-      where['numOfMetersSquared'] = {
+      where['numOfMeterSquared'] = {
+        ...where['numOfMeterSquared'],
         gte: parseInt(numOfMetersSquaredHigherThan),
       };
     }

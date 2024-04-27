@@ -61,7 +61,7 @@ export default function AdminPage() {
           />
         </Center>
         {activeButton === "Users" ? (
-          <UserCards users={users} onUserDelete={handleUpdateCard} />
+          <UserCards users={users} onUserUpdate={handleUpdateCard} />
         ) : (
           <Listings
             listings={listings}

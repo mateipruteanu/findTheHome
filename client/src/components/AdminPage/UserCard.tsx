@@ -1,5 +1,6 @@
 import { GetUserDTO } from "@/dtos/GetUserDTO";
 import useDeleteUser from "@/hooks/useDeleteUser";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Flex,
   Button,
@@ -12,28 +13,44 @@ import {
   AlertDialogHeader,
   AlertDialogOverlay,
   useDisclosure,
+  Select,
+  Stack,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import RoleDropdown from "./RoleDropdown";
+import useChangeRole from "@/hooks/useChangeRole";
 
 export default function UserCard({
   user,
-  onUserDelete,
+  onUserUpdate,
 }: {
   user: GetUserDTO;
-  onUserDelete: () => void;
+  onUserUpdate: () => void;
 }) {
   const cancelRef = useRef<HTMLButtonElement>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
+  const [role, setRole] = useState<"ADMIN" | "USER">(user.role);
+  const { changeRole } = useChangeRole();
 
   const { deleteUser } = useDeleteUser();
 
   const handleDeleteClick = () => {
     console.log("Deleting user:", user.id);
     deleteUser(user.id);
-    onUserDelete();
+    onUserUpdate();
     onClose();
+  };
+
+  const handleRoleChange = (role: "ADMIN" | "USER") => {
+    setRole(role);
+    changeRole(user.id, role);
+    onUserUpdate();
   };
 
   return (
@@ -53,15 +70,18 @@ export default function UserCard({
           <Text fontSize="sm">{user.email}</Text>
           <Text fontSize="sm">Role: {user.role}</Text>
           <Text fontSize="sm">
-            Last Login: {new Date(user.lastLogin).toDateString()}, {new Date(user.lastLogin).toLocaleTimeString()}
+            Last Login: {new Date(user.lastLogin).toDateString()},{" "}
+            {new Date(user.lastLogin).toLocaleTimeString()}
           </Text>
           <Text fontSize="sm">Number of listings: {user.numberOfListings}</Text>
         </Box>
-        <Box>
+
+        <Stack>
+          <RoleDropdown role={role} onRoleChange={handleRoleChange} />
           <Button colorScheme="red" onClick={onOpen}>
             Delete
           </Button>
-        </Box>
+        </Stack>
       </Flex>
 
       <AlertDialog

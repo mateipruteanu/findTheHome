@@ -5,15 +5,15 @@ import { useState } from "react";
 
 export default function UserCards({
   users,
-  onUserDelete,
+  onUserUpdate,
 }: {
   users: GetUserDTO[];
-  onUserDelete: () => void;
+  onUserUpdate: () => void;
 }) {
   return (
-    <Flex flexDir={"column"} justifyContent="center" alignItems={'center'}>
+    <Flex flexDir={"column"} justifyContent="center" alignItems={"center"}>
       {users.map((user) => (
-        <UserCard key={user.id} user={user} onUserDelete={onUserDelete} />
+        <UserCard key={user.id} user={user} onUserUpdate={onUserUpdate} />
       ))}
     </Flex>
   );

@@ -5,6 +5,7 @@ export type GetUserDTO = {
   firstName: string;
   lastName: string;
   role: "ADMIN" | "USER";
+  numberOfListings?: number;
   lastLogin: Date;
   message: string;
 };

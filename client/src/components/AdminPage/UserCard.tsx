@@ -55,6 +55,7 @@ export default function UserCard({
           <Text fontSize="sm">
             Last Login: {new Date(user.lastLogin).toDateString()}, {new Date(user.lastLogin).toLocaleTimeString()}
           </Text>
+          <Text fontSize="sm">Number of listings: {user.numberOfListings}</Text>
         </Box>
         <Box>
           <Button colorScheme="red" onClick={onOpen}>

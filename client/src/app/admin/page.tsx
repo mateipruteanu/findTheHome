@@ -1,7 +1,9 @@
 "use client";
 import SelectorButton from "@/components/AdminPage/SelectorButton";
 import UserCards from "@/components/AdminPage/UserCards";
+import Listings from "@/components/SearchPage/Listings";
 import Pagination from "@/components/SearchPage/Pagination";
+import useGetListings from "@/hooks/useGetListings";
 import useGetUsers from "@/hooks/useGetUsers";
 import {
   Heading,
@@ -23,12 +25,18 @@ export default function AdminPage() {
     getUsers,
     paginationInfo: userPaginationInfo,
   } = useGetUsers();
+  const {
+    listings,
+    loadingListings,
+    getListings,
+    paginationInfo: listingPaginationInfo,
+  } = useGetListings();
 
   const handleButtonToggle = (listingType: string) => {
     setActiveButton(listingType);
   };
 
-  const handleRemoveCard = () => {
+  const handleUpdateCard = () => {
     setTriggerFetch(!triggerFetch);
   };
 
@@ -36,7 +44,7 @@ export default function AdminPage() {
     if (activeButton === "Users") {
       getUsers(page);
     } else {
-      // fetch listings
+      getListings(page);
     }
   }, [activeButton, page, triggerFetch]);
 
@@ -53,12 +61,28 @@ export default function AdminPage() {
           />
         </Center>
         {activeButton === "Users" ? (
-          <UserCards users={users} onUserDelete={handleRemoveCard} />
+          <UserCards users={users} onUserDelete={handleUpdateCard} />
         ) : (
-          <Box>TBD</Box>
+          <Listings
+            listings={listings}
+            paginationInfo={listingPaginationInfo}
+            onListingUpdate={handleUpdateCard}
+            type="my-homes"
+          />
         )}
 
-        {userPaginationInfo && userPaginationInfo.total_pages ? (
+        {userPaginationInfo &&
+        userPaginationInfo.total_pages &&
+        activeButton === "Users" ? (
+          <Pagination
+            page={page}
+            setPage={setPage}
+            totalPages={userPaginationInfo.total_pages}
+          />
+        ) : null}
+        {listingPaginationInfo &&
+        listingPaginationInfo.total_pages &&
+        activeButton === "Listings" ? (
           <Pagination
             page={page}
             setPage={setPage}

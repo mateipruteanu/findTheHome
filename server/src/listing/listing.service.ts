@@ -144,7 +144,10 @@ export class ListingService {
     userId: string,
     updateListingDto: UpdateListingDto,
   ) {
-    if (!(await this.userService.canUserModifyListing(userId, id))) {
+    if (
+      !(await this.userService.canUserModifyListing(userId, id)) &&
+      !(await this.userService.isUserAdmin(userId))
+    ) {
       throw new UserCantEditListingException();
     }
 

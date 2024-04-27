@@ -18,9 +18,10 @@ export interface AuthUser {
   lastName: string;
   email: string;
   photo: string;
+  role: string;
 }
 
-interface DecodedToken extends AuthUser {
+export interface DecodedToken extends AuthUser {
   sub: string;
   exp: number;
 }
@@ -69,12 +70,17 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
         firstName: decoded.firstName,
         lastName: decoded.lastName,
         photo: decoded.photo,
+        role: decoded.role,
       });
 
       console.log("[AuthProvider] Login successful:", data);
       toast.dismiss();
       toast.success("Logged in successfully!");
-      router.push(Routes.HOME);
+      if (decoded.role.toLowerCase() === "admin") {
+        router.push(Routes.ADMIN);
+      } else {
+        router.push(Routes.HOME);
+      }
     } else {
       console.error("[AuthProvider] Login failed:", data.message);
       toast.dismiss();
@@ -147,6 +153,7 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
           firstName: decoded.firstName,
           lastName: decoded.lastName,
           photo: decoded.photo,
+          role: decoded.role,
         });
       } catch (error) {
         console.error("[AuthProvider] Failed to decode JWT", error);

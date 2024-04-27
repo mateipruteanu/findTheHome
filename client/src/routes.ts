@@ -6,6 +6,7 @@ export class Routes {
   static SEARCH = "/search";
   static ACCOUNT = "/account";
   static MY_HOMES = "/my-homes";
+  static ADMIN = "/admin";
 }
 
 export class PrivateRoutes {
@@ -16,4 +17,8 @@ export class PrivateRoutes {
 
 export function isPrivateRoute(route: string) {
   return Object.values(PrivateRoutes).includes(route);
+}
+
+export function isAdminRoute(route: string) {
+  return route === Routes.ADMIN;
 }

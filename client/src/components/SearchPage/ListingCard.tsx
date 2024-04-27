@@ -42,7 +42,7 @@ export default function ListingCard({
   const { saveListing, unsaveListing } = useSaveListing();
 
   const [isListingSaved, setIsListingSaved] = useState(
-    listing.savedBy.some((savedByUser) => savedByUser?.id === user.id) ?? false
+    listing.savedBy.some((savedByUser) => savedByUser?.id === user?.id) ?? false
   );
 
   const handleSaveListingButtonClick = () => {

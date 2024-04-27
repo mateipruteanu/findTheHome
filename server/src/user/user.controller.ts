@@ -112,4 +112,27 @@ export class UserController {
     const userId = req.user.sub;
     return this.userService.delete({ id }, userId);
   }
+
+  @Patch(':id/change-role')
+  @UseGuards(AuthGuard)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: Messages.UserChangedRole,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: ErrorMessages.UserNotFound,
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: ErrorMessages.CannotChangeUserRole,
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: ErrorMessages.InternalServerError,
+  })
+  changeRole(@Request() req, @Param('id') id: string, @Body() body: any) {
+    const userId = req.user.sub;
+    return this.userService.changeRole({ id }, userId, body);
+  }
 }

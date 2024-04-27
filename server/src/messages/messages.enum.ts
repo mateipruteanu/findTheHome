@@ -4,6 +4,7 @@ export enum Messages {
   UserDeleted = 'User deleted successfully',
   UserFound = 'User found',
   UserSavedListingsFound = 'Listings saved by user found',
+  UserChangedRole = 'Changed the users role successfully',
 
   AddressUpdated = 'Address updated successfully',
   AddressDeleted = 'Address deleted successfully',

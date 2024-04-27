@@ -13,6 +13,8 @@ import * as bcrypt from 'bcrypt';
 import { WrongPasswordException } from './exceptions/wrong-password.exception';
 import { PageNumberTooLowException } from 'src/listing/exceptions/page-number-low.exception';
 import { PageNumberTooHighException } from 'src/listing/exceptions/page-number-high.exception';
+import { CannotChangeRoleException } from './exceptions/cannot-change-role.exception';
+import { InvalidRoleException } from './exceptions/invalid-role.exception';
 
 @Injectable()
 export class UserService {
@@ -238,6 +240,42 @@ export class UserService {
           ...data,
           password: undefined,
           message: Messages.UserDeleted,
+        };
+      });
+  }
+
+  async changeRole(id: Prisma.UserWhereUniqueInput, userId: string, body: any) {
+    const isUserAdmin = await this.isUserAdmin(userId);
+
+    if (!isUserAdmin) {
+      throw new CannotChangeRoleException();
+    }
+
+    if (
+      body.role?.toUpperCase() !== 'ADMIN' &&
+      body.role?.toUpperCase() !== 'USER'
+    ) {
+      throw new InvalidRoleException();
+    }
+
+    return this.prisma.user
+      .update({
+        where: id,
+        data: {
+          role: body.role.toUpperCase(),
+        },
+      })
+      .catch((error) => {
+        if (error.code === 'P2025') {
+          throw new UserNotFoundException();
+        }
+        throw new InternalServerErrorException();
+      })
+      .then((data) => {
+        return {
+          ...data,
+          password: undefined,
+          message: Messages.UserChangedRole,
         };
       });
   }

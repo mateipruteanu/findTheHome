@@ -28,6 +28,7 @@ export class AuthService {
       firstName: user.firstName,
       lastName: user.lastName,
       photo: user.photo,
+      role: user.role,
     };
 
     return {

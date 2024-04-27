@@ -9,6 +9,7 @@ import {
   HttpStatus,
   UseGuards,
   Request,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -46,8 +47,8 @@ export class UserController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: ErrorMessages.InternalServerError,
   })
-  getAll() {
-    return this.userService.getAll({});
+  getAll(@Query() query: any) {
+    return this.userService.getAll(query);
   }
 
   @Get(':id')

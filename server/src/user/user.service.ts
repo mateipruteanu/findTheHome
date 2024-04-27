@@ -11,6 +11,8 @@ import { CannotDeleteAccountException } from './exceptions/cannot-delete-account
 import { CannotUpdateAccountException } from './exceptions/cannot-update-account.exception';
 import * as bcrypt from 'bcrypt';
 import { WrongPasswordException } from './exceptions/wrong-password.exception';
+import { PageNumberTooLowException } from 'src/listing/exceptions/page-number-low.exception';
+import { PageNumberTooHighException } from 'src/listing/exceptions/page-number-high.exception';
 
 @Injectable()
 export class UserService {
@@ -36,25 +38,80 @@ export class UserService {
       });
   }
 
-  getAll(params: {
-    skip?: number;
-    take?: number;
-    cursor?: Prisma.UserWhereUniqueInput;
-    where?: Prisma.UserWhereInput;
-    orderBy?: Prisma.UserOrderByWithRelationInput;
-  }) {
+  async getAll(queryParams: any) {
+    const { page, orderBy } = queryParams;
+
+    if (page && parseInt(page) < 1) {
+      throw new PageNumberTooLowException(page);
+    }
+
+    const where = await this.addToWhereQuery(queryParams);
+
+    const totalUsers = await this.prisma.user.count({ where });
+
+    const take = 5;
+    const total_pages = Math.ceil(totalUsers / take);
+
+    if (page && parseInt(page) > total_pages && total_pages !== 0) {
+      throw new PageNumberTooHighException(page, total_pages);
+    }
+    const skip = page ? (parseInt(page) - 1) * take : undefined;
+
+    const current_page = page ? parseInt(page) : 1;
+    let next_page = page ? current_page + 1 : 1;
+    let previous_page = page ? current_page - 1 : 1;
+
+    if (current_page === total_pages) {
+      next_page = total_pages;
+    }
+    if (current_page === 1) {
+      previous_page = 1;
+    }
+
     return this.prisma.user
-      .findMany(params)
-      .catch(() => {
-        throw new InternalServerErrorException();
+      .findMany({
+        where,
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          email: true,
+          role: true,
+          lastLogin: true,
+          password: false,
+          listings: false,
+          savedListings: false,
+        },
+        skip,
+        take,
+        orderBy: orderBy ? { [orderBy]: 'asc' } : undefined,
+      })
+      .catch((error) => {
+        if (error.code === 'P2025') {
+          throw new UserNotFoundException();
+        }
+        console.log(error);
+        throw new InternalServerErrorException(error);
       })
       .then((data) => {
-        return data.map((user) => {
+        const users = data.map((user) => {
           return {
             ...user,
             password: undefined,
           };
         });
+
+        return {
+          users: users,
+          pagination: {
+            previous_page,
+            current_page,
+            next_page,
+            total_pages,
+            records_on_page: users.length,
+            total_records: totalUsers,
+          },
+        };
       });
   }
 
@@ -218,5 +275,51 @@ export class UserService {
       .then((data) => {
         return data.role === 'ADMIN';
       });
+  }
+
+  addToWhereQuery(queryParams: any) {
+    const { email, role, firstName, lastName } = queryParams;
+    let where = {};
+
+    if (email) {
+      where = {
+        ...where,
+        email: {
+          contains: email,
+          mode: 'insensitive',
+        },
+      };
+    }
+
+    if (role) {
+      if (role.toUpperCase() === 'ADMIN' || role.toUpperCase() === 'USER') {
+        where = {
+          ...where,
+          role: role.toUpperCase(),
+        };
+      }
+    }
+
+    if (firstName) {
+      where = {
+        ...where,
+        firstName: {
+          contains: firstName,
+          mode: 'insensitive',
+        },
+      };
+    }
+
+    if (lastName) {
+      where = {
+        ...where,
+        lastName: {
+          contains: lastName,
+          mode: 'insensitive',
+        },
+      };
+    }
+
+    return where;
   }
 }

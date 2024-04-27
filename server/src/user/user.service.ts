@@ -79,7 +79,11 @@ export class UserService {
           role: true,
           lastLogin: true,
           password: false,
-          listings: false,
+          listings: {
+            select: {
+              id: true,
+            },
+          },
           savedListings: false,
         },
         skip,
@@ -98,6 +102,8 @@ export class UserService {
           return {
             ...user,
             password: undefined,
+            numberOfListings: user.listings.length,
+            listings: undefined,
           };
         });
 

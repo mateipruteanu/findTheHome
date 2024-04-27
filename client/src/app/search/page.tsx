@@ -86,7 +86,7 @@ export default function SearchPage() {
         </Suspense>
         {loadingListings ? <Center>Loading...</Center> : null}
         <Listings listings={listings} paginationInfo={paginationInfo} />
-        {paginationInfo.total_pages ? (
+        {paginationInfo && paginationInfo.total_pages ? (
           <Pagination
             page={page}
             setPage={setPage}

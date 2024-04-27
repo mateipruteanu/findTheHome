@@ -15,12 +15,7 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import {
-  IconBathFilled,
-  IconBedFilled,
-
-  IconRuler2,
-} from "@tabler/icons-react";
+import { IconBathFilled, IconBedFilled, IconRuler2 } from "@tabler/icons-react";
 import SpecsButton from "./SpecsButton";
 import ListingOptions from "../ListingOptions";
 import { useRouter } from "next/navigation";
@@ -29,15 +24,18 @@ import { AuthUser } from "@/AuthProvider";
 import useSaveListing from "@/hooks/useSaveListing";
 import SaveButton from "./SaveButton";
 import { useState } from "react";
+import { on } from "events";
 
 export default function ListingCard({
   listing,
   type,
   user,
+  onListingUpdate,
 }: {
   listing: Listing;
   type?: "my-homes";
   user: AuthUser;
+  onListingUpdate?: () => void;
 }) {
   const router = useRouter();
   const cardModal = useDisclosure();
@@ -57,6 +55,7 @@ export default function ListingCard({
       saveListing(listing);
       setIsListingSaved(true);
     }
+    if (onListingUpdate) onListingUpdate();
   };
 
   return (
@@ -180,7 +179,10 @@ export default function ListingCard({
               alignItems={"end"}
             >
               {type === "my-homes" ? (
-                <ListingOptions listing={listing} />
+                <ListingOptions
+                  listing={listing}
+                  onListingUpdate={onListingUpdate}
+                />
               ) : (
                 <Button
                   borderRadius={"full"}

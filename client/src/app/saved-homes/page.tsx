@@ -8,6 +8,7 @@ import { Container, Heading } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 
 export default function SavedHomesPage() {
+  const [triggerFetch, setTriggerFetch] = useState(false);
   const [listings, setListings] = useState([]);
   const [page, setPage] = useState(1);
   const [paginationInfo, setPaginationInfo] = useState<PaginationInfo>(
@@ -15,6 +16,11 @@ export default function SavedHomesPage() {
   );
   const [loadingListings, setLoadingListings] = useState(false);
   const { user } = useContext(AuthContext);
+
+  const onListingUpdate = () => {
+    setTriggerFetch(!triggerFetch);
+    console.log("triggerFetch ", triggerFetch);
+  };
 
   useEffect(() => {
     setLoadingListings(true);
@@ -26,7 +32,7 @@ export default function SavedHomesPage() {
         setPaginationInfo(data.pagination);
       });
     setLoadingListings(false);
-  }, [page, user]);
+  }, [page, user, triggerFetch]);
 
   return (
     <>
@@ -34,8 +40,8 @@ export default function SavedHomesPage() {
         <Heading maxW="2xl" pl={"15%"} pt={"5"}>
           Saved homes.
         </Heading>
-        <Listings listings={listings} paginationInfo={paginationInfo} />
-        {paginationInfo.total_pages ? (
+        <Listings listings={listings} paginationInfo={paginationInfo} onListingUpdate={onListingUpdate}/>
+        {paginationInfo && paginationInfo.total_pages ? (
           <Pagination
             page={page}
             setPage={setPage}

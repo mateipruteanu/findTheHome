@@ -9,12 +9,17 @@ import React, { useContext, useEffect, useState } from "react";
 
 export default function MyHomesPage() {
   const [listings, setListings] = useState([]);
+  const [triggerFetch, setTriggerFetch] = useState(false);
   const { user, loading } = useContext(AuthContext);
   const [page, setPage] = useState(1);
   const [loadingListings, setLoadingListings] = useState(false);
   const [paginationInfo, setPaginationInfo] = useState<PaginationInfo>(
     {} as PaginationInfo
   );
+
+  const onListingUpdate = () => {
+    setTriggerFetch(!triggerFetch);
+  }
 
   useEffect(() => {
     setLoadingListings(true);
@@ -26,7 +31,8 @@ export default function MyHomesPage() {
         setPaginationInfo(data.pagination);
       });
     setLoadingListings(false);
-  }, [user, page]);
+  }, [user, page, triggerFetch]);
+
 
   return (
     <>
@@ -48,13 +54,14 @@ export default function MyHomesPage() {
             listings={listings}
             type={"my-homes"}
             paginationInfo={paginationInfo}
+            onListingUpdate={onListingUpdate}
           />
         ) : (
           <Center>
             <Heading as={"h2"}>No listings found.</Heading>
           </Center>
         )}
-        {paginationInfo.total_pages ? (
+        {paginationInfo && paginationInfo.total_pages ? (
           <Pagination
             page={page}
             setPage={setPage}

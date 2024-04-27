@@ -20,11 +20,13 @@ export default function AddEditModal({
   isOpen,
   OnClose,
   listing,
+  onListingUpdate,
 }: {
   mode: "add" | "edit";
   isOpen: boolean;
   OnClose: () => void;
   listing?: Listing;
+  onListingUpdate?: () => void;
 }) {
   const emptyListing: CreateListingDTO = {
     title: "",
@@ -66,12 +68,14 @@ export default function AddEditModal({
     if (mode === "add") {
       await addListing(listingDetails);
       if (!isAdding && !addingError) {
+        if(onListingUpdate) onListingUpdate();
         OnClose();
         setListingDetails(emptyListing);
       }
     } else {
       await updateListing(listing?.id || "", listingDetails);
       if (!isUpdating && !updatingError) {
+        if(onListingUpdate) onListingUpdate();
         OnClose();
         setListingDetails(emptyListing);
       }

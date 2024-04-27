@@ -9,17 +9,21 @@ export default function Listings({
   listings,
   paginationInfo,
   type,
+  onListingUpdate,
 }: {
   listings: Listing[];
   paginationInfo: PaginationInfo;
   type?: "my-homes";
+  onListingUpdate?: () => void;
 }) {
   const { user } = useContext(AuthContext);
 
   return (
     <Box>
       <Center>
-        <Text>{paginationInfo.total_records} listings found.</Text>
+        <Text>
+          {paginationInfo ? paginationInfo.total_records : ""} listings found.
+        </Text>
       </Center>
       {listings ? (
         <Box>
@@ -29,6 +33,7 @@ export default function Listings({
                 listing={listing}
                 type={type}
                 user={user as AuthUser}
+                onListingUpdate={onListingUpdate}
               />
             </Box>
           ))}

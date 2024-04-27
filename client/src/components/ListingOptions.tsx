@@ -25,7 +25,13 @@ import useDeleteListing from "@/hooks/useDeleteListing";
 import { useRef } from "react";
 import AddEditModal from "./AddEditModal";
 
-export default function ListingOptions({ listing }: { listing: Listing }) {
+export default function ListingOptions({
+  listing,
+  onListingUpdate,
+}: {
+  listing: Listing;
+  onListingUpdate?: () => void;
+}) {
   const { isLoading, error, deleteListing } = useDeleteListing();
   const deleteModal = useDisclosure();
   const editModal = useDisclosure();
@@ -33,8 +39,8 @@ export default function ListingOptions({ listing }: { listing: Listing }) {
 
   const handleDeleteClick = async () => {
     await deleteListing(listing.id);
+    if (onListingUpdate) onListingUpdate();
     deleteModal.onClose();
-    setTimeout(() => window.location.reload(), 1000);
   };
 
   return (
@@ -90,7 +96,11 @@ export default function ListingOptions({ listing }: { listing: Listing }) {
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={deleteModal.onClose} borderRadius={"full"}>
+              <Button
+                ref={cancelRef}
+                onClick={deleteModal.onClose}
+                borderRadius={"full"}
+              >
                 Cancel
               </Button>
               <Button
@@ -105,7 +115,13 @@ export default function ListingOptions({ listing }: { listing: Listing }) {
           </AlertDialogContent>
         </AlertDialogOverlay>
       </AlertDialog>
-      <AddEditModal isOpen={editModal.isOpen} OnClose={editModal.onClose} mode={"edit"} listing={listing} />
+      <AddEditModal
+        isOpen={editModal.isOpen}
+        OnClose={editModal.onClose}
+        mode={"edit"}
+        onListingUpdate={onListingUpdate}
+        listing={listing}
+      />
     </>
   );
 }

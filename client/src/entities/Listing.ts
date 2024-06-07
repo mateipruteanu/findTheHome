@@ -20,9 +20,9 @@ export type Listing = {
     firstName: string;
     lastName: string;
     role: "USER" | "ADMIN";
-    lastLogin: string; // @TODO: could maybe use a date
+    lastLogin: string; 
   };
-  postedAt: string; // @TODO: could maybe use a date
+  postedAt: string; 
   posterId: string;
   savedBy: {
     id: string;

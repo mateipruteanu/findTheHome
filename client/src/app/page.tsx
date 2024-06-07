@@ -1,5 +1,4 @@
 "use client";
-import AddEditModal from "@/components/AddEditModal";
 import HelpSection from "@/components/HomePage/HelpSection";
 import HeroSection from "@/components/HomePage/HeroSection";
 import { Container } from "@chakra-ui/react";

@@ -7,10 +7,12 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { Listing } from "@/entities/Listing";
 import ListingModalBody from "./ListingModalBody";
 import { LightModeColors } from "@/colors";
+import MortgageCalculatorModal from "./MortgageCalculatorModal";
 
 export default function ListingModal({
   listing,
@@ -21,12 +23,10 @@ export default function ListingModal({
   isOpen: boolean;
   onClose: () => void;
 }) {
+  const mortgageCalculatorModal = useDisclosure();
+
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      scrollBehavior="inside"
-    >
+    <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside">
       <ModalOverlay />
       <ModalContent
         minW={"fit-content"}
@@ -35,6 +35,11 @@ export default function ListingModal({
       >
         <ModalBody>
           <ListingModalBody listing={listing} />
+          <MortgageCalculatorModal
+            isOpen={mortgageCalculatorModal.isOpen}
+            onClose={mortgageCalculatorModal.onClose}
+            listing={listing}
+          />
         </ModalBody>
 
         <ModalFooter>
@@ -45,6 +50,14 @@ export default function ListingModal({
             borderRadius={"full"}
           >
             Close
+          </Button>
+          <Button
+            mr={3}
+            onClick={mortgageCalculatorModal.onOpen}
+            variant={"outline"}
+            borderRadius={"full"}
+          >
+            Calculate Mortgage
           </Button>
           <Button
             mr={3}

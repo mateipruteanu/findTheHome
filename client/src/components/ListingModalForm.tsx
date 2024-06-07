@@ -14,6 +14,7 @@ import {
   Stack,
   Textarea,
 } from "@chakra-ui/react";
+import ImageUpload from "./ImageUpload";
 
 export default function ListingModalForm({
   listingDetails,
@@ -22,11 +23,15 @@ export default function ListingModalForm({
   listingDetails: any;
   setListingDetails: any;
 }) {
+  const handleFileUpload = (file: File[]) => {
+    // @TODO: Handle file upload
+  };
+
   return (
     <Stack direction={"column"} spacing={5}>
       <Stack direction={"row"}>
         <FormControl id="image">
-          <FormLabel>Upload an Image</FormLabel>
+          {/* <FormLabel>Upload an Image</FormLabel>
           <Input
             type="text"
             borderRadius={"full"}
@@ -40,6 +45,12 @@ export default function ListingModalForm({
                 image: e.target.value,
               });
             }}
+          /> */}
+          <ImageUpload
+            size="100px"
+            rounded="xl"
+            onUpdateFile={(file) => handleFileUpload(file)}
+            multiple={true}
           />
         </FormControl>
         <FormControl id="title" isRequired>

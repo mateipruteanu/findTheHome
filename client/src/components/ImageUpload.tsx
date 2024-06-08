@@ -15,21 +15,22 @@ import React, { useState } from "react";
 export default function ImageUpload({
   size = "100px",
   rounded = "full",
-  onUpdateFile,
   multiple,
+  imageFile,
+  handleImageUpload,
+  imageURL,
 }: {
   size?: string;
   rounded?: string;
-  onUpdateFile: (file: File[]) => void;
   multiple: boolean;
+  imageFile: File | null;
+  handleImageUpload: (file: File[]) => void;
+  imageURL: string | null;
 }) {
-  const [uploadedFile, setUploadedFile] = useState(null);
-
   const handleFileChange = (event: any) => {
     const files = event.target.files;
     console.log(event);
-    setUploadedFile(files);
-    onUpdateFile(files);
+    handleImageUpload(files);
   };
 
   return (
@@ -45,10 +46,9 @@ export default function ImageUpload({
       overflow="hidden"
       position="relative"
       onClick={(e) => {
-        if (uploadedFile) {
+        if (imageFile) {
           setTimeout(() => {
-            setUploadedFile(null);
-            onUpdateFile([]);
+            handleImageUpload([]);
           }, 100);
         }
       }}
@@ -59,7 +59,7 @@ export default function ImageUpload({
         h="100%"
         _hover={{ bg: "blackAlpha.600" }}
       >
-        {!uploadedFile && (
+        {!imageFile && (
           <VStack>
             <AddIcon />
             <Text>Upload</Text>
@@ -67,19 +67,19 @@ export default function ImageUpload({
         )}
       </Center>
 
-      {uploadedFile && (
-        <ScaleFade initialScale={0.9} in={uploadedFile !== null}>
+      {imageFile && (
+        <ScaleFade initialScale={0.9} in={imageFile !== null}>
           <Image
             w="100%"
             h={"100%"}
-            src={URL.createObjectURL(uploadedFile[0])}
+            src={imageURL ? imageURL : ""}
             alt="Uploaded"
             rounded={rounded}
           />
         </ScaleFade>
       )}
 
-      {!uploadedFile && (
+      {!imageFile && (
         <Input
           required
           style={{ display: "none" }}

@@ -54,6 +54,15 @@ export default function AddEditModal({
 
   const [listingDetails, setListingDetails] = useState(initialListing);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageURL, setImageURL] = useState<string | null>(null);
+  const handleImageUpload = (file: File[]) => {
+    if (file.length === 0) {
+      return;
+    }
+    setImageFile(file[0]);
+    const url = URL.createObjectURL(file[0]);
+    setImageURL(url);
+  };
   const {
     addListing,
     isLoading: isAdding,
@@ -73,6 +82,12 @@ export default function AddEditModal({
           if (onListingUpdate) onListingUpdate();
           OnClose();
           setListingDetails(emptyListing);
+          setImageFile(null);
+          if (imageURL) {
+            URL.revokeObjectURL(imageURL);
+          }
+          setImageURL(null);
+
         }
       }
     } else {
@@ -102,7 +117,8 @@ export default function AddEditModal({
             listingDetails={listingDetails}
             setListingDetails={setListingDetails}
             imageFile={imageFile}
-            setImageFile={setImageFile}
+            imageURL={imageURL}
+            handleImageUpload={handleImageUpload}
           />
         </ModalBody>
 

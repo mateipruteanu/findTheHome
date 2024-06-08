@@ -20,20 +20,15 @@ export default function ListingModalForm({
   listingDetails,
   setListingDetails,
   imageFile,
-  setImageFile,
+  handleImageUpload,
+  imageURL,
 }: {
   listingDetails: any;
   setListingDetails: any;
-  imageFile: any;
-  setImageFile: any;
+  imageFile: File | null;
+  handleImageUpload: any;
+  imageURL: string | null;
 }) {
-  const handleFileUpload = (file: File[]) => {
-    if (file.length === 0) {
-      return;
-    }
-    setImageFile(file[0]);
-  };
-
   return (
     <Stack direction={"column"} spacing={5}>
       <Stack direction={"row"}>
@@ -41,7 +36,9 @@ export default function ListingModalForm({
           <ImageUpload
             size="100px"
             rounded="xl"
-            onUpdateFile={(file) => handleFileUpload(file)}
+            imageURL={imageURL}
+            imageFile={imageFile}
+            handleImageUpload={handleImageUpload}
             multiple={true}
           />
         </FormControl>

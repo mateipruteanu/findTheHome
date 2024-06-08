@@ -80,13 +80,13 @@ export default function AddEditModal({
         await addListing(listingDetails, imageFile);
         if (!isAdding && !addingError) {
           if (onListingUpdate) onListingUpdate();
-          OnClose();
           setListingDetails(emptyListing);
           setImageFile(null);
           if (imageURL) {
             URL.revokeObjectURL(imageURL);
           }
           setImageURL(null);
+          OnClose();
 
         }
       }

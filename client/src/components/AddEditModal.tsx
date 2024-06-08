@@ -53,6 +53,7 @@ export default function AddEditModal({
   }
 
   const [listingDetails, setListingDetails] = useState(initialListing);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const {
     addListing,
     isLoading: isAdding,
@@ -66,16 +67,18 @@ export default function AddEditModal({
 
   const handleAddSaveButtonClick = async () => {
     if (mode === "add") {
-      await addListing(listingDetails);
-      if (!isAdding && !addingError) {
-        if(onListingUpdate) onListingUpdate();
-        OnClose();
-        setListingDetails(emptyListing);
+      if (imageFile) {
+        await addListing(listingDetails, imageFile);
+        if (!isAdding && !addingError) {
+          if (onListingUpdate) onListingUpdate();
+          OnClose();
+          setListingDetails(emptyListing);
+        }
       }
     } else {
       await updateListing(listing?.id || "", listingDetails);
       if (!isUpdating && !updatingError) {
-        if(onListingUpdate) onListingUpdate();
+        if (onListingUpdate) onListingUpdate();
         OnClose();
         setListingDetails(emptyListing);
       }
@@ -98,6 +101,8 @@ export default function AddEditModal({
           <ListingModalForm
             listingDetails={listingDetails}
             setListingDetails={setListingDetails}
+            imageFile={imageFile}
+            setImageFile={setImageFile}
           />
         </ModalBody>
 

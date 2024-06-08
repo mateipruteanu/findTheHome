@@ -19,33 +19,25 @@ import ImageUpload from "./ImageUpload";
 export default function ListingModalForm({
   listingDetails,
   setListingDetails,
+  imageFile,
+  setImageFile,
 }: {
   listingDetails: any;
   setListingDetails: any;
+  imageFile: any;
+  setImageFile: any;
 }) {
   const handleFileUpload = (file: File[]) => {
-    // @TODO: Handle file upload
+    if (file.length === 0) {
+      return;
+    }
+    setImageFile(file[0]);
   };
 
   return (
     <Stack direction={"column"} spacing={5}>
       <Stack direction={"row"}>
         <FormControl id="image">
-          {/* <FormLabel>Upload an Image</FormLabel>
-          <Input
-            type="text"
-            borderRadius={"full"}
-            variant={"filled"}
-            boxShadow="md"
-            placeholder="Enter image URL..."
-            value={listingDetails.image}
-            onChange={(e) => {
-              setListingDetails({
-                ...listingDetails,
-                image: e.target.value,
-              });
-            }}
-          /> */}
           <ImageUpload
             size="100px"
             rounded="xl"

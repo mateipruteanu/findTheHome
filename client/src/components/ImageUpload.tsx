@@ -1,6 +1,7 @@
 "use client";
 import { AddIcon } from "@chakra-ui/icons";
 import {
+  Button,
   Center,
   Image,
   Input,
@@ -26,6 +27,7 @@ export default function ImageUpload({
 
   const handleFileChange = (event: any) => {
     const files = event.target.files;
+    console.log(event);
     setUploadedFile(files);
     onUpdateFile(files);
   };
@@ -42,6 +44,14 @@ export default function ImageUpload({
       cursor="pointer"
       overflow="hidden"
       position="relative"
+      onClick={(e) => {
+        if (uploadedFile) {
+          setTimeout(() => {
+            setUploadedFile(null);
+            onUpdateFile([]);
+          }, 100);
+        }
+      }}
     >
       <Center
         position="absolute"
@@ -49,10 +59,12 @@ export default function ImageUpload({
         h="100%"
         _hover={{ bg: "blackAlpha.600" }}
       >
-        <VStack>
-          <AddIcon />
-          <Text>Upload</Text>
-        </VStack>
+        {!uploadedFile && (
+          <VStack>
+            <AddIcon />
+            <Text>Upload</Text>
+          </VStack>
+        )}
       </Center>
 
       {uploadedFile && (
@@ -67,15 +79,17 @@ export default function ImageUpload({
         </ScaleFade>
       )}
 
-      <Input
-        required
-        style={{ display: "none" }}
-        type="file"
-        multiple={multiple}
-        id="files"
-        name="files"
-        onChange={handleFileChange}
-      />
+      {!uploadedFile && (
+        <Input
+          required
+          style={{ display: "none" }}
+          type="file"
+          accept="image/png, image/jpeg, image/jpg"
+          id="files"
+          name="files"
+          onChange={handleFileChange}
+        />
+      )}
     </Center>
   );
 }

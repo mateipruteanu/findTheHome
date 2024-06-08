@@ -8,7 +8,15 @@ export default function useAddListing() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const addListing = async (createListingDTO: CreateListingDTO) => {
+  const addListing = async (
+    createListingDTO: CreateListingDTO,
+    imageFile: File
+  ) => {
+
+    const formData = new FormData();
+    formData.append("image", imageFile);
+    formData.append("listing", JSON.stringify(createListingDTO));
+
     setIsLoading(true);
     toast.loading("Adding listing...");
     setError(null);
@@ -17,10 +25,9 @@ export default function useAddListing() {
       const response = await fetch(`${BACKEND_URL}/listing`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(createListingDTO),
+        body: formData,
       });
       const data = await response.json();
       if (response.ok) {

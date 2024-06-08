@@ -11,15 +11,25 @@ import Fuse from 'fuse.js';
 import { PageNumberTooHighException } from './exceptions/page-number-high.exception';
 import { PageNumberTooLowException } from './exceptions/page-number-low.exception';
 import { Messages } from 'src/messages/messages.enum';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 @Injectable()
 export class ListingService {
+  private readonly s3Client = new S3Client({ region: process.env.AWS_REGION });
+
   constructor(
     private prisma: PrismaService,
     private userService: UserService,
   ) {}
 
-  async create(posterId: string, listing: CreateListingDto) {
+  async create(
+    posterId: string,
+    listing: CreateListingDto,
+    file: Buffer,
+    image_key: string,
+  ) {
+    const imageUrl = await this.uploadFile(image_key, file);
+
     const listingData: Prisma.ListingCreateInput = {
       ...listing,
       postedBy: {
@@ -30,7 +40,7 @@ export class ListingService {
       address: {
         create: listing.address,
       },
-      image: listing.image ? listing.image : '',
+      image: imageUrl ? imageUrl : '',
     };
 
     return this.prisma.listing
@@ -43,6 +53,20 @@ export class ListingService {
       .then((data) => {
         return data;
       });
+  }
+
+  async uploadFile(key: string, file: Buffer) {
+    const command = new PutObjectCommand({
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: key,
+      Body: file,
+      ACL: 'public-read',
+    });
+
+    await this.s3Client.send(command);
+    const url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+
+    return url;
   }
 
   async getAll(queryParams: any) {

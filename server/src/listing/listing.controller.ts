@@ -10,6 +10,11 @@ import {
   UseGuards,
   Request,
   Query,
+  UseInterceptors,
+  UploadedFile,
+  ParseFilePipe,
+  MaxFileSizeValidator,
+  FileTypeValidator,
 } from '@nestjs/common';
 import { ListingService } from './listing.service';
 import { CreateListingDto } from './dto/create-listing.dto';
@@ -18,14 +23,16 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ErrorMessages } from 'src/messages/error-messages.enum';
 import { Messages } from 'src/messages/messages.enum';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('listing')
 @ApiTags('Listing')
 export class ListingController {
   constructor(private readonly listingService: ListingService) {}
 
-  @UseGuards(AuthGuard)
   @Post()
+  @UseGuards(AuthGuard)
+  @UseInterceptors(FileInterceptor('image'))
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: Messages.ListingCreated,
@@ -38,8 +45,29 @@ export class ListingController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: ErrorMessages.InternalServerError,
   })
-  create(@Request() req, @Body() createListingDto: CreateListingDto) {
-    return this.listingService.create(req.user.sub, createListingDto);
+  async create(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new FileTypeValidator({
+            fileType: '.(png|jpeg|jpg)',
+          }),
+          new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 5 }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+    @Request() req,
+  ) {
+    const image_key = `listingimages/${req.user.sub}/${Date.now()}-${file.originalname}`;
+    const createListingDto: CreateListingDto = JSON.parse(req.body.listing);
+
+    return this.listingService.create(
+      req.user.sub,
+      createListingDto,
+      file.buffer,
+      image_key,
+    );
   }
 
   @Get()

@@ -41,7 +41,7 @@ export class CreateListingDto {
   address: CreateAddressDto;
 
   @IsNumber()
-  @Min(1000)
+  @Min(50)
   @Max(100000000)
   @ApiProperty()
   price: number;

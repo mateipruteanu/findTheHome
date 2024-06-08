@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
 import { DarkModeColors, LightModeColors } from "@/colors";
+import { useRouter } from "next/navigation";
 
 interface Props {
   img: string;
@@ -23,6 +24,8 @@ interface Props {
 }
 
 export default function HelpCard(props: Props) {
+  const router = useRouter();
+
   return (
     <Center py={"5"} minHeight={"450px"}>
       <Box
@@ -73,7 +76,9 @@ export default function HelpCard(props: Props) {
             bg={LightModeColors.secondary}
             color={LightModeColors.text}
             rounded={"full"}
-            onClick={() => console.log("[NotImplemented] " + props.buttonText)}
+            onClick={() => {
+              router.push(props.buttonUrl);
+            }}
             _hover={{
               bg: "orange.400",
             }}

@@ -288,6 +288,7 @@ export class ListingService {
 
   async addToWhereQuery(queryParams) {
     const {
+      title,
       homeType,
       listingType,
       city,
@@ -305,6 +306,14 @@ export class ListingService {
     } = queryParams;
 
     const where = {};
+
+    if (title) {
+      where['title'] = {
+        contains: title,
+        mode: 'insensitive',
+      };
+    }
+
     if (homeType) {
       where['homeType'] = homeType.toUpperCase();
     }

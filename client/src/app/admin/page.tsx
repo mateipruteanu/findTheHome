@@ -12,6 +12,7 @@ import {
   Button,
   Flex,
   Center,
+  Input,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
@@ -19,6 +20,9 @@ export default function AdminPage() {
   const [triggerFetch, setTriggerFetch] = useState(false);
   const [activeButton, setActiveButton] = useState("Users");
   const [page, setPage] = useState(1);
+  const [userSearchInput, setUserSearchInput] = useState("");
+  const [listingSearchInput, setListingSearchInput] = useState("");
+
   const {
     users,
     loadingUsers,
@@ -38,6 +42,16 @@ export default function AdminPage() {
 
   const handleUpdateCard = () => {
     setTriggerFetch(!triggerFetch);
+  };
+
+  const handleUserSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserSearchInput(e.target.value);
+    getUsers(1, e.target.value);
+  };
+
+  const handleListingSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setListingSearchInput(e.target.value);
+    getListings(1, undefined, new URLSearchParams([["title", e.target.value]]));
   };
 
   useEffect(() => {
@@ -61,14 +75,34 @@ export default function AdminPage() {
           />
         </Center>
         {activeButton === "Users" ? (
-          <UserCards users={users} onUserUpdate={handleUpdateCard} />
+          <Box>
+            <Flex justifyContent="center" alignItems="center">
+              <Input
+                w={{ base: "100%", md: "45%" }}
+                type="text"
+                placeholder="Search by email"
+                value={userSearchInput}
+                onChange={handleUserSearch}
+              />
+            </Flex>
+            <UserCards users={users} onUserUpdate={handleUpdateCard} />
+          </Box>
         ) : (
-          <Listings
-            listings={listings}
-            paginationInfo={listingPaginationInfo}
-            onListingUpdate={handleUpdateCard}
-            type="my-homes"
-          />
+          <Center flexDirection={"column"}>
+            <Input
+              w={{ base: "100%", md: "45%" }}
+              type="text"
+              placeholder="Search by title"
+              value={listingSearchInput}
+              onChange={handleListingSearch}
+            />
+            <Listings
+              listings={listings}
+              paginationInfo={listingPaginationInfo}
+              onListingUpdate={handleUpdateCard}
+              type="my-homes"
+            />
+          </Center>
         )}
 
         {userPaginationInfo &&

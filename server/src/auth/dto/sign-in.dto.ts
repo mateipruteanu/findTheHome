@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 
 export class SignInDto {
-  @IsEmail()
+  @IsEmail({}, { message: 'Invalid email' })
   @MaxLength(50)
   @IsNotEmpty()
   @ApiProperty()

@@ -26,7 +26,7 @@ export class UpdateUserDto {
   @ApiPropertyOptional()
   lastName: string;
 
-  @IsEmail()
+  @IsEmail({}, { message: 'Invalid email' })
   @MaxLength(50)
   @IsNotEmpty()
   @IsOptional()
